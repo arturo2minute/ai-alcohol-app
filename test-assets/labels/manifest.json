@@ -1,0 +1,273 @@
+[
+  {
+    "id": "bourbon-valid-01",
+    "displayName": "Valid Bourbon Label",
+    "file": "valid/bourbon-valid-01.png",
+    "beverageType": "distilled_spirits",
+    "category": "valid",
+    "expectedFields": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45% Alc./Vol. (90 Proof)",
+      "netContents": "750 mL",
+      "governmentWarningRequired": true
+    },
+    "labelGroundTruth": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45% Alc./Vol. (90 Proof)",
+      "netContents": "750 mL",
+      "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
+    },
+    "expectedOutcome": "match",
+    "expectedMismatches": [],
+    "ocrMustFind": [
+      "OLD TOM DISTILLERY",
+      "Kentucky Straight Bourbon Whiskey",
+      "45% Alc./Vol.",
+      "90 Proof",
+      "750 mL",
+      "GOVERNMENT WARNING"
+    ],
+    "notes": "Baseline valid distilled spirits label."
+  },
+  {
+    "id": "wine-valid-01",
+    "displayName": "Valid Wine Label",
+    "file": "valid/wine-valid-01.png",
+    "beverageType": "wine",
+    "category": "valid",
+    "expectedFields": {
+      "brandName": "CASCADE RIDGE CELLARS",
+      "classType": "Red Table Wine",
+      "alcoholContent": "13.5% Alc./Vol.",
+      "netContents": "750 mL",
+      "governmentWarningRequired": true
+    },
+    "labelGroundTruth": {
+      "brandName": "CASCADE RIDGE CELLARS",
+      "classType": "Red Table Wine",
+      "alcoholContent": "13.5% Alc./Vol.",
+      "netContents": "750 mL",
+      "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
+    },
+    "expectedOutcome": "match",
+    "expectedMismatches": [],
+    "ocrMustFind": [
+      "CASCADE RIDGE CELLARS",
+      "Red Table Wine",
+      "13.5% Alc./Vol.",
+      "750 mL",
+      "GOVERNMENT WARNING"
+    ],
+    "notes": "Baseline valid wine label."
+  },
+  {
+    "id": "beer-valid-01",
+    "displayName": "Valid Beer Label",
+    "file": "valid/beer-valid-01.png",
+    "beverageType": "beer",
+    "category": "valid",
+    "expectedFields": {
+      "brandName": "NORTH FORK BREWING CO.",
+      "classType": "India Pale Ale",
+      "alcoholContent": "6.8% Alc./Vol.",
+      "netContents": "12 FL OZ",
+      "governmentWarningRequired": true
+    },
+    "labelGroundTruth": {
+      "brandName": "NORTH FORK BREWING CO.",
+      "classType": "India Pale Ale",
+      "alcoholContent": "6.8% Alc./Vol.",
+      "netContents": "12 FL OZ",
+      "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
+    },
+    "expectedOutcome": "match",
+    "expectedMismatches": [],
+    "ocrMustFind": [
+      "NORTH FORK BREWING CO.",
+      "India Pale Ale",
+      "6.8% Alc./Vol.",
+      "12 FL OZ",
+      "GOVERNMENT WARNING"
+    ],
+    "notes": "Baseline valid beer label."
+  },
+  {
+    "id": "missing-warning-01",
+    "displayName": "Invalid Missing Warning Label",
+    "file": "invalid/missing-warning-01.png",
+    "beverageType": "distilled_spirits",
+    "category": "invalid",
+    "expectedFields": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45% Alc./Vol. (90 Proof)",
+      "netContents": "750 mL",
+      "governmentWarningRequired": true
+    },
+    "labelGroundTruth": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45% Alc./Vol. (90 Proof)",
+      "netContents": "750 mL",
+      "governmentWarningText": ""
+    },
+    "expectedOutcome": "mismatch",
+    "expectedMismatches": [
+      "governmentWarning"
+    ],
+    "ocrMustFind": [
+      "OLD TOM DISTILLERY",
+      "Kentucky Straight Bourbon Whiskey",
+      "45% Alc./Vol.",
+      "90 Proof",
+      "750 mL"
+    ],
+    "ocrMustNotFind": [
+      "GOVERNMENT WARNING",
+      "According to the Surgeon General"
+    ],
+    "notes": "Invalid because the required government warning is missing."
+  },
+  {
+    "id": "wrong-abv-01",
+    "displayName": "Invalid Wrong ABV Label",
+    "file": "invalid/wrong-abv-01.png",
+    "beverageType": "wine",
+    "category": "invalid",
+    "expectedFields": {
+      "brandName": "CASCADE RIDGE CELLARS",
+      "classType": "Red Table Wine",
+      "alcoholContent": "13.5% Alc./Vol.",
+      "netContents": "750 mL",
+      "governmentWarningRequired": true
+    },
+    "labelGroundTruth": {
+      "brandName": "CASCADE RIDGE CELLARS",
+      "classType": "Red Table Wine",
+      "alcoholContent": "12.5% Alc./Vol.",
+      "netContents": "750 mL",
+      "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
+    },
+    "expectedOutcome": "mismatch",
+    "expectedMismatches": [
+      "alcoholContent"
+    ],
+    "ocrMustFind": [
+      "CASCADE RIDGE CELLARS",
+      "Red Table Wine",
+      "12.5% Alc./Vol.",
+      "750 mL",
+      "GOVERNMENT WARNING"
+    ],
+    "ocrMustNotFind": [
+      "13.5% Alc./Vol."
+    ],
+    "notes": "Invalid because the label shows 12.5% Alc./Vol. while the expected application value is 13.5% Alc./Vol."
+  },
+  {
+    "id": "brand-mismatch-01",
+    "displayName": "Invalid Brand Mismatch Label",
+    "file": "invalid/brand-mismatch-01.png",
+    "beverageType": "wine",
+    "category": "invalid",
+    "expectedFields": {
+      "brandName": "CASCADE RIDGE CELLARS",
+      "classType": "Red Table Wine",
+      "alcoholContent": "13.5% Alc./Vol.",
+      "netContents": "750 mL",
+      "governmentWarningRequired": true
+    },
+    "labelGroundTruth": {
+      "brandName": "RIVER STONE CELLARS",
+      "classType": "Red Table Wine",
+      "alcoholContent": "13.5% Alc./Vol.",
+      "netContents": "750 mL",
+      "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
+    },
+    "expectedOutcome": "mismatch",
+    "expectedMismatches": [
+      "brandName"
+    ],
+    "ocrMustFind": [
+      "RIVER STONE CELLARS",
+      "Red Table Wine",
+      "13.5% Alc./Vol.",
+      "750 mL",
+      "GOVERNMENT WARNING"
+    ],
+    "ocrMustNotFind": [
+      "CASCADE RIDGE CELLARS"
+    ],
+    "notes": "Invalid because the label brand differs from the expected application brand."
+  },
+  {
+    "id": "glare-tilted-01",
+    "displayName": "Edge Case Tilted/Glare Label",
+    "file": "edge-cases/glare-tilted-01.png",
+    "beverageType": "beer",
+    "category": "edge-case",
+    "expectedFields": {
+      "brandName": "NORTH FORK BREWING CO.",
+      "classType": "India Pale Ale",
+      "alcoholContent": "6.8% Alc./Vol.",
+      "netContents": "12 FL OZ",
+      "governmentWarningRequired": true
+    },
+    "labelGroundTruth": {
+      "brandName": "NORTH FORK BREWING CO.",
+      "classType": "India Pale Ale",
+      "alcoholContent": "6.8% Alc./Vol.",
+      "netContents": "12 FL OZ",
+      "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
+    },
+    "expectedOutcome": "match_or_needs_review",
+    "expectedMismatches": [],
+    "ocrMustFind": [
+      "NORTH FORK BREWING CO.",
+      "India Pale Ale",
+      "6.8% Alc./Vol.",
+      "12 FL OZ",
+      "GOVERNMENT WARNING"
+    ],
+    "notes": "Edge case for OCR robustness. Because glare/tilt may reduce OCR quality, Needs Review is acceptable if key fields are incomplete."
+  },
+  {
+    "id": "warning-case-error-01",
+    "displayName": "Edge Case Warning Case Error",
+    "file": "edge-cases/warning-case-error-01.png",
+    "beverageType": "distilled_spirits",
+    "category": "edge-case",
+    "expectedFields": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45% Alc./Vol. (90 Proof)",
+      "netContents": "750 mL",
+      "governmentWarningRequired": true
+    },
+    "labelGroundTruth": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45% Alc./Vol. (90 Proof)",
+      "netContents": "750 mL",
+      "governmentWarningText": "Government Warning: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
+    },
+    "expectedOutcome": "mismatch",
+    "expectedMismatches": [
+      "governmentWarning"
+    ],
+    "ocrMustFind": [
+      "OLD TOM DISTILLERY",
+      "Kentucky Straight Bourbon Whiskey",
+      "45% Alc./Vol.",
+      "90 Proof",
+      "750 mL",
+      "Government Warning"
+    ],
+    "ocrMustNotFind": [
+      "GOVERNMENT WARNING:"
+    ],
+    "notes": "Invalid because the required warning prefix is title case instead of uppercase."
+  }
+]
