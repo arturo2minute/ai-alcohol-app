@@ -1,3 +1,45 @@
+# AI Alcohol App
+
+Current status: working frontend/backend scaffold with placeholder verification only.
+
+## Local Run
+
+Backend:
+
+```powershell
+cd backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python -m uvicorn app.main:app --reload --port 3001
+```
+
+Frontend:
+
+```powershell
+cd frontend
+npm install
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+Open `http://127.0.0.1:5173`.
+
+## Current Features
+
+- Upload one label image
+- Manually enter expected fields
+- Submit to backend `/verify`
+- Display placeholder `Match` / `Mismatch` / `Needs Review` results
+- Backend health check at `GET /health`
+
+## Current Limitations
+
+- No OCR yet
+- No AI extraction yet
+- No persistence
+- Placeholder verification logic only
+- Frontend is JavaScript; backend is FastAPI/Python
+
 # **Take-Home Project: AI-Powered Alcohol Label Verification App**
 
 ## **Project Background & Stakeholder Context**

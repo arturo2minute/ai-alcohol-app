@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alcohol Label Verification Prototype</title>
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <p class="eyebrow">AI Alcohol App</p>
+        <h1>Alcohol Label Verification Prototype</h1>
+        <p class="subhead">
+          Upload a label image, enter expected fields, and review placeholder verification results.
+        </p>
+        <p id="health-status" class="health health-pending">Checking backend...</p>
+      </header>
+
+      <main class="layout">
+        <section class="panel">
+          <h2>Submission</h2>
+          <form id="verify-form" class="form">
+            <label class="field">
+              <span>Label image</span>
+              <input id="image" name="image" type="file" accept="image/*" required />
+            </label>
+
+            <div class="field-grid">
+              <label class="field">
+                <span>Brand name</span>
+                <input id="brandName" name="brandName" type="text" placeholder="OLD TOM DISTILLERY" />
+              </label>
+
+              <label class="field">
+                <span>Class/type</span>
+                <input
+                  id="classType"
+                  name="classType"
+                  type="text"
+                  placeholder="Kentucky Straight Bourbon Whiskey"
+                />
+              </label>
+
+              <label class="field">
+                <span>Alcohol content</span>
+                <input id="alcoholContent" name="alcoholContent" type="text" placeholder="45% Alc./Vol." />
+              </label>
+
+              <label class="field">
+                <span>Net contents</span>
+                <input id="netContents" name="netContents" type="text" placeholder="750 mL" />
+              </label>
+            </div>
+
+            <label class="field">
+              <span>Government warning</span>
+              <textarea
+                id="governmentWarning"
+                name="governmentWarning"
+                rows="4"
+                placeholder="GOVERNMENT WARNING: (1) According to the Surgeon General..."
+              ></textarea>
+            </label>
+
+            <button id="submit-button" type="submit">Run placeholder verification</button>
+            <p id="form-message" class="message"></p>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="results-header">
+            <div>
+              <h2>Results</h2>
+              <p class="subtle">Placeholder output from the backend. OCR is not wired yet.</p>
+            </div>
+            <div id="file-summary" class="file-summary"></div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Expected</th>
+                  <th>Detected</th>
+                  <th>Status</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="results-body">
+                <tr>
+                  <td colspan="5" class="empty-state">Submit a label to see placeholder verification results.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

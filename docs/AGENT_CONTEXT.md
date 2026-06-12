@@ -36,3 +36,11 @@ Produce a short implementation plan and identify the files you intend to create 
 Run the app locally if possible.
 Run tests if available.
 Update README and assumptions/tradeoffs.
+
+## Current Implementation Status
+- Frontend runs locally with Vite on `127.0.0.1:5173`.
+- Backend runs locally with FastAPI on `127.0.0.1:3001`.
+- VS Code debugging is configured in `.vscode/launch.json` for the backend.
+- `backend/app/main.py` is the FastAPI entry point and should stay thin.
+- Placeholder verification logic lives in `backend/app/verifier.py`.
+- OCR is not implemented yet.
