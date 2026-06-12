@@ -1,11 +1,11 @@
 import os
-from typing import Optional
 
 from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.verifier import build_placeholder_verification
+from app.ocr import OCRExtractionError, extract_text_lines
+from app.verifier import build_verification_result
 
 # FastAPI application setup.
 app = FastAPI(title="AI Alcohol App Backend")
@@ -30,21 +30,20 @@ app.add_middleware(
 
 # Simple health endpoint so the frontend can confirm the API is reachable.
 @app.get("/health")
-async def health() -> dict[str, str]:
+async def health():
     return {"status": "ok", "service": "ai-alcohol-app-backend"}
 
 
-# Placeholder verification endpoint. It accepts the uploaded image and form fields,
-# then returns fake results until OCR and real extraction are implemented.
+# Verification endpoint. It accepts the uploaded image and form fields,
+# extracts OCR text, and applies deterministic comparison rules.
 @app.post("/verify")
 async def verify(
-    image: Optional[UploadFile] = File(default=None),
-    brandName: Optional[str] = Form(default=""),
-    classType: Optional[str] = Form(default=""),
-    alcoholContent: Optional[str] = Form(default=""),
-    netContents: Optional[str] = Form(default=""),
-    governmentWarning: Optional[str] = Form(default=""),
-) -> dict:
+    image=File(default=None),
+    brandName=Form(default=""),
+    classType=Form(default=""),
+    alcoholContent=Form(default=""),
+    netContents=Form(default=""),
+):
     # Ensure an image was uploaded and is 10 MB or smaller.
     if image is None or not image.filename:
         return JSONResponse(
@@ -60,7 +59,14 @@ async def verify(
             content={"error": "Image file must be 10 MB or smaller."},
         )
 
-    return build_placeholder_verification(
+    try:
+        ocr_lines = extract_text_lines(file_bytes)
+        ocr_error = None
+    except OCRExtractionError as exc:
+        ocr_lines = []
+        ocr_error = str(exc)
+
+    return build_verification_result(
         original_name=image.filename,
         mime_type=image.content_type,
         size_bytes=len(file_bytes),
@@ -68,5 +74,6 @@ async def verify(
         class_type=classType,
         alcohol_content=alcoholContent,
         net_contents=netContents,
-        government_warning=governmentWarning,
+        ocr_lines=ocr_lines,
+        ocr_error=ocr_error,
     )

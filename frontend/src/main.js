@@ -88,7 +88,7 @@ function renderResults(payload) {
 function clearResults() {
   resultsBody.innerHTML = `
     <tr>
-      <td colspan="5" class="empty-state">Submit a label to see placeholder verification results.</td>
+      <td colspan="5" class="empty-state">Submit a label to see OCR-based verification results.</td>
     </tr>
   `;
   fileSummary.textContent = "";
@@ -96,7 +96,7 @@ function clearResults() {
 
 function setSubmittingState(isSubmitting) {
   submitButton.disabled = isSubmitting;
-  submitButton.textContent = isSubmitting ? "Submitting..." : "Run placeholder verification";
+  submitButton.textContent = isSubmitting ? "Submitting..." : "Run OCR verification";
 }
 
 function statusClass(status) {

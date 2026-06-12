@@ -12,7 +12,7 @@
         <p class="eyebrow">AI Alcohol App</p>
         <h1>Alcohol Label Verification Prototype</h1>
         <p class="subhead">
-          Upload a label image, enter expected fields, and review placeholder verification results.
+          Upload a label image, enter expected fields, and review OCR-based verification results.
         </p>
         <p id="health-status" class="health health-pending">Checking backend...</p>
       </header>
@@ -58,12 +58,12 @@
               <textarea
                 id="governmentWarning"
                 name="governmentWarning"
-                rows="4"
-                placeholder="GOVERNMENT WARNING: (1) According to the Surgeon General..."
-              ></textarea>
+                rows="6"
+                readonly
+              >GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems.</textarea>
             </label>
 
-            <button id="submit-button" type="submit">Run placeholder verification</button>
+            <button id="submit-button" type="submit">Run OCR verification</button>
             <p id="form-message" class="message"></p>
           </form>
         </section>
@@ -72,7 +72,7 @@
           <div class="results-header">
             <div>
               <h2>Results</h2>
-              <p class="subtle">Placeholder output from the backend. OCR is not wired yet.</p>
+              <p class="subtle">OCR output is compared with deterministic verification rules in the backend.</p>
             </div>
             <div id="file-summary" class="file-summary"></div>
           </div>
@@ -90,7 +90,7 @@
               </thead>
               <tbody id="results-body">
                 <tr>
-                  <td colspan="5" class="empty-state">Submit a label to see placeholder verification results.</td>
+                  <td colspan="5" class="empty-state">Submit a label to see OCR-based verification results.</td>
                 </tr>
               </tbody>
             </table>
