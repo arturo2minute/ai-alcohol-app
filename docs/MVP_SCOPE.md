@@ -21,14 +21,18 @@ A simple web app that allows a user to:
   - Normalize punctuation where reasonable
 - Use stricter matching for government warning:
   - Required text must be present.
-  - “GOVERNMENT WARNING:” must be uppercase.
-  - Flag warning as mismatch if wording is incomplete or materially changed.
+  - `GOVERNMENT WARNING:` must be uppercase.
+  - For this prototype, the warning is treated as a fixed standard value rather than a user-entered freeform field.
+  - For this prototype, the full warning is checked as an exact, case-sensitive string match.
+  - Flag warning as mismatch if wording is incomplete, casing differs, or text is materially changed.
+
 ### AI Fallback Path
 - Trigger AI-powered extraction when:
   - OCR misses required fields
   - OCR confidence is low
   - OCR result produces mismatches
   - government warning is incomplete or unclear
+
 ### Verification Rule
 - AI does not make the compliance decision. AI only extracts candidate values. The backend comparison service determines Match, Mismatch, or Needs Review.
 

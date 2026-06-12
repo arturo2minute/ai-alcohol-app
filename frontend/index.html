@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <title>Alcohol Label Verification Prototype</title>
     <script type="module" src="/src/main.js"></script>
   </head>
@@ -18,7 +19,7 @@
       </header>
 
       <main class="layout">
-        <section class="panel">
+        <section class="panel panel-form">
           <h2>Submission</h2>
           <form id="verify-form" class="form">
             <label class="field">
@@ -53,32 +54,44 @@
               </label>
             </div>
 
-            <label class="field">
+            <div class="field">
               <span>Government warning</span>
-              <textarea
+              <div class="static-warning" role="note">
+                GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink
+                alcoholic beverages during pregnancy because of the risk of birth defects. (2)
+                Consumption of alcoholic beverages impairs your ability to drive a car or operate
+                machinery, and may cause health problems.
+              </div>
+              <input
                 id="governmentWarning"
                 name="governmentWarning"
-                rows="6"
-                readonly
-              >GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems.</textarea>
-            </label>
+                type="hidden"
+                value="GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
+              />
+            </div>
 
             <button id="submit-button" type="submit">Run OCR verification</button>
             <p id="form-message" class="message"></p>
           </form>
         </section>
 
-        <section class="panel">
+        <section class="panel panel-results">
           <div class="results-header">
             <div>
               <h2>Results</h2>
-              <p class="subtle">OCR output is compared with deterministic verification rules in the backend.</p>
             </div>
             <div id="file-summary" class="file-summary"></div>
           </div>
 
           <div class="table-wrap">
             <table>
+              <colgroup>
+                <col class="col-field" />
+                <col class="col-expected" />
+                <col class="col-detected" />
+                <col class="col-status" />
+                <col class="col-notes" />
+              </colgroup>
               <thead>
                 <tr>
                   <th>Field</th>

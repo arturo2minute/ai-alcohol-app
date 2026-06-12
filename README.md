@@ -1,6 +1,6 @@
 # AI Alcohol App
 
-Current status: working frontend/backend scaffold with placeholder verification only.
+Current status: working frontend/backend prototype with local OCR-based verification.
 
 ## Local Run
 
@@ -29,16 +29,28 @@ Open `http://127.0.0.1:5173`.
 - Upload one label image
 - Manually enter expected fields
 - Submit to backend `/verify`
-- Display placeholder `Match` / `Mismatch` / `Needs Review` results
+- Run local OCR on the uploaded label image
+- Display `Match` / `Mismatch` / `Needs Review` results
+- Treat the government warning as a fixed standard value in the product
+- Check the full government warning as an exact, case-sensitive string match
 - Backend health check at `GET /health`
 
 ## Current Limitations
 
-- No OCR yet
 - No AI extraction yet
 - No persistence
-- Placeholder verification logic only
+- OCR still produces noisy text on some images, so edge cases may return `Needs Review` or extra mismatches
+- Batch upload is not implemented yet
 - Frontend is JavaScript; backend is FastAPI/Python
+
+## Backend Tests
+
+From the repo root:
+
+```powershell
+cd backend
+.\.venv\Scripts\python -m unittest discover -s tests -v
+```
 
 # **Take-Home Project: AI-Powered Alcohol Label Verification App**
 

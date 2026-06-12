@@ -42,5 +42,7 @@ Update README and assumptions/tradeoffs.
 - Backend runs locally with FastAPI on `127.0.0.1:3001`.
 - VS Code debugging is configured in `.vscode/launch.json` for the backend.
 - `backend/app/main.py` is the FastAPI entry point and should stay thin.
-- Placeholder verification logic lives in `backend/app/verifier.py`.
-- OCR is not implemented yet.
+- OCR extraction lives in `backend/app/ocr.py`.
+- Verification logic lives in `backend/app/verifier.py`.
+- The backend now uses OCR-based detection instead of placeholder detected values.
+- The government warning is treated as a fixed standard value in the product and matched exactly, including case.

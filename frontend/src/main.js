@@ -8,7 +8,6 @@ const resultsBody = document.querySelector("#results-body");
 const fileSummary = document.querySelector("#file-summary");
 const submitButton = document.querySelector("#submit-button");
 const healthStatus = document.querySelector("#health-status");
-
 checkHealth();
 
 form.addEventListener("submit", async (event) => {
@@ -49,6 +48,27 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
+resultsBody.addEventListener("click", (event) => {
+  const warningRow = event.target.closest(".warning-row-toggle");
+
+  if (!warningRow) {
+    return;
+  }
+
+  toggleWarningRow(warningRow);
+});
+
+resultsBody.addEventListener("keydown", (event) => {
+  const warningRow = event.target.closest(".warning-row-toggle");
+
+  if (!warningRow || (event.key !== "Enter" && event.key !== " ")) {
+    return;
+  }
+
+  event.preventDefault();
+  toggleWarningRow(warningRow);
+});
+
 async function checkHealth() {
   try {
     const response = await fetch(`${apiBaseUrl}/health`);
@@ -68,21 +88,11 @@ async function checkHealth() {
 
 function renderResults(payload) {
   const rows = payload.results
-    .map(
-      (result) => `
-        <tr>
-          <td>${escapeHtml(result.field)}</td>
-          <td>${escapeHtml(result.expectedValue || "-")}</td>
-          <td>${escapeHtml(result.detectedValue || "-")}</td>
-          <td><span class="badge badge-${statusClass(result.status)}">${escapeHtml(result.status)}</span></td>
-          <td>${escapeHtml(result.notes || "-")}</td>
-        </tr>
-      `
-    )
+    .map((result) => renderResultRow(result))
     .join("");
 
   resultsBody.innerHTML = rows;
-  fileSummary.textContent = `${payload.file.originalName} | ${payload.summary.Match} match, ${payload.summary.Mismatch} mismatch, ${payload.summary["Needs Review"]} needs review`;
+  fileSummary.innerHTML = renderFileSummary(payload);
 }
 
 function clearResults() {
@@ -99,8 +109,57 @@ function setSubmittingState(isSubmitting) {
   submitButton.textContent = isSubmitting ? "Submitting..." : "Run OCR verification";
 }
 
+function renderFileSummary(payload) {
+  return `
+    <div class="file-summary-name">${escapeHtml(payload.file.originalName)}</div>
+    <div class="file-summary-counts">
+      <span class="summary-pill summary-pill-match">${payload.summary.Match} match</span>
+      <span class="summary-pill summary-pill-mismatch">${payload.summary.Mismatch} mismatch</span>
+      <span class="summary-pill summary-pill-review">${payload.summary["Needs Review"]} needs review</span>
+    </div>
+  `;
+}
+
+function renderResultRow(result) {
+  if (result.field === "Government Warning") {
+    return `
+      <tr
+        class="warning-row-toggle"
+        tabindex="0"
+        role="button"
+        aria-expanded="false"
+      >
+        <td data-label="Field">${escapeHtml(result.field)}</td>
+        <td data-label="Expected" class="warning-summary" title="${escapeHtml(result.expectedValue || "-")}">
+          <div class="warning-cell-text">${escapeHtml(result.expectedValue || "-")}</div>
+        </td>
+        <td data-label="Detected" class="warning-summary" title="${escapeHtml(result.detectedValue || "-")}">
+          <div class="warning-cell-text">${escapeHtml(result.detectedValue || "-")}</div>
+        </td>
+        <td data-label="Status"><span class="badge badge-${statusClass(result.status)}">${escapeHtml(result.status)}</span></td>
+        <td data-label="Notes">${escapeHtml(result.notes || "-")}</td>
+      </tr>
+    `;
+  }
+
+  return `
+    <tr>
+      <td data-label="Field">${escapeHtml(result.field)}</td>
+      <td data-label="Expected">${escapeHtml(result.expectedValue || "-")}</td>
+      <td data-label="Detected">${escapeHtml(result.detectedValue || "-")}</td>
+      <td data-label="Status"><span class="badge badge-${statusClass(result.status)}">${escapeHtml(result.status)}</span></td>
+      <td data-label="Notes">${escapeHtml(result.notes || "-")}</td>
+    </tr>
+  `;
+}
+
 function statusClass(status) {
   return status.toLowerCase().replace(/\s+/g, "-");
+}
+
+function toggleWarningRow(warningRow) {
+  const isExpanded = warningRow.getAttribute("aria-expanded") === "true";
+  warningRow.setAttribute("aria-expanded", String(!isExpanded));
 }
 
 function escapeHtml(value) {
