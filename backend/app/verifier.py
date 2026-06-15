@@ -27,6 +27,7 @@ BRAND_CLASS_REVIEW_THRESHOLD = 0.92
 NET_CONTENTS_REVIEW_THRESHOLD = 0.90
 WARNING_REVIEW_THRESHOLD = 0.97
 
+# Builds the complete verification result object, including expected fields, OCR-detected fields, individual field results, and summary statistics for the UI
 def build_verification_result(
     *,
     original_name,
@@ -63,7 +64,7 @@ def build_verification_result(
         "note": build_verification_note(results, ocr_error),
     }
 
-
+# Builds the verification result for the government warning field, applying specific logic for matching and review
 def build_warning_result(field_definition, expected_value, detected_value):
     if not detected_value:
         return {
@@ -109,7 +110,7 @@ def build_warning_result(field_definition, expected_value, detected_value):
         "notes": "Detected warning text differs from the expected wording.",
     }
 
-
+# Normalizes a value by trimming whitespace and ensuring it's a valid string
 def build_verification_note(results, ocr_error):
     if ocr_error:
         return f"OCR could not be completed: {ocr_error}"
@@ -119,7 +120,7 @@ def build_verification_note(results, ocr_error):
 
     return "OCR-based verification completed."
 
-
+# Builds the verification results for all fields by comparing expected and detected values, including status and notes for each field
 def build_verification_results(expected_fields, detected_fields):
     results = []
 
@@ -137,7 +138,7 @@ def build_verification_results(expected_fields, detected_fields):
 
     return results
 
-
+# Builds the verification result for a single field, including status and notes based on matching and similarity
 def build_verification_result_row(field_definition, expected_value, detected_value):
     field_key = field_definition["key"]
 
@@ -206,7 +207,7 @@ def build_verification_result_row(field_definition, expected_value, detected_val
     }
 
 
-# Summarizes the results for the UI header.
+# Summarizes the results for the UI header
 def summarize_results(results):
     summary = {
         "total": 0,
@@ -232,13 +233,13 @@ def normalize_whitespace(value):
     return " ".join(value.strip().split())
 
 
-# Normalizes minor trailing punctuation differences in OCR warning text.
+# Normalizes minor trailing punctuation differences in OCR warning text
 def normalize_warning_text_for_comparison(value):
     normalized = normalize_whitespace(value)
     return re.sub(r"[.!?]+$", "", normalized)
 
 
-# Normalizes common OCR variations in net contents units before matching.
+# Normalizes common OCR variations in net contents units before matching
 def normalize_net_contents_candidate(value):
     normalized = value.upper().strip()
     normalized = re.sub(r"FL\s*[0O]\s*Z", "FL OZ", normalized)
@@ -247,6 +248,7 @@ def normalize_net_contents_candidate(value):
     return normalized
 
 
+# Normalizes common OCR variations in alcohol content before matching
 def normalize_alcohol_content_candidate(value):
     normalized = value.upper().strip()
     normalized = re.sub(r"(?<=\d)%(?=[A-Z])", "% ", normalized)

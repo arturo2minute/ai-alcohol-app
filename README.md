@@ -1,6 +1,6 @@
 # AI Alcohol App
 
-Current status: working frontend/backend prototype with local OCR-based verification.
+Current status: working frontend/backend prototype with local OCR-based verification for single uploads and sequential batch review.
 
 ## Local Run
 
@@ -27,20 +27,65 @@ Open `http://127.0.0.1:5173`.
 ## Current Features
 
 - Upload one label image
+- Switch between single upload and batch upload modes
 - Manually enter expected fields
+- Select an image folder plus a manifest JSON file for batch review
 - Submit to backend `/verify`
 - Run local OCR on the uploaded label image
 - Display `Match` / `Mismatch` / `Needs Review` results
+- Step through batch results one label at a time, including missing-file and request-error items
 - Treat the government warning as a fixed standard value in the product
 - Check the full government warning as an exact, case-sensitive string match
 - Backend health check at `GET /health`
+
+## Batch Upload
+
+1. Turn on `Batch Upload` in the header.
+2. Select the folder that directly matches the manifest paths.
+3. Select one manifest JSON file.
+4. Run verification. The frontend submits labels one at a time and keeps a review trail for verified labels, missing files, and request failures.
+
+The manifest file must look like this:
+
+```json
+{
+  "manifestVersion": 1,
+  "entries": [
+    {
+      "submissionId": "BASELINE-001",
+      "displayName": "Valid Bourbon Label",
+      "file": "bourbon-valid-01.png",
+      "fields": {
+        "brandName": "OLD TOM DISTILLERY",
+        "classType": "Kentucky Straight Bourbon Whiskey",
+        "alcoholContent": "45% Alc./Vol. (90 Proof)",
+        "netContents": "750 mL"
+      }
+    }
+  ]
+}
+```
+
+Rules:
+
+- `manifestVersion` must be `1`.
+- `entries` must be a non-empty array.
+- Each entry must include `file`, `fields.brandName`, `fields.classType`, `fields.alcoholContent`, and `fields.netContents`.
+- `submissionId` and `displayName` are optional.
+- Manifest `file` values must use exact relative paths from the selected folder root and should use forward slashes.
+
+Example:
+
+- If you select `test-assets/labels/baseline`, the manifest should reference `bourbon-valid-01.png`.
+- If you select the parent folder instead, the manifest would need to reference `baseline/bourbon-valid-01.png`.
 
 ## Current Limitations
 
 - No AI extraction yet
 - No persistence
 - OCR still produces noisy text on some images, so edge cases may return `Needs Review` or extra mismatches
-- Batch upload is not implemented yet
+- Batch processing is sequential, not parallel
+- Batch orchestration happens in the frontend; there is no backend batch API
 - Frontend is JavaScript; backend is FastAPI/Python
 
 ## Backend Tests

@@ -10,64 +10,101 @@
   <body>
     <div class="page">
       <header class="hero">
-        <p class="eyebrow">AI Alcohol App</p>
-        <h1>Alcohol Label Verification Prototype</h1>
-        <p class="subhead">
-          Upload a label image, enter expected fields, and review OCR-based verification results.
-        </p>
-        <p id="health-status" class="health health-pending">Checking backend...</p>
+        <div class="hero-topbar">
+          <div>
+            <h1>Alcohol Label Verification App</h1>
+            <p class="subhead">
+              Upload a label image, enter expected fields, and review OCR-based verification results.
+            </p>
+            <p id="health-status" class="health health-pending">Checking backend...</p>
+          </div>
+
+          <label class="header-toggle" for="batch-upload-toggle">
+            <span class="header-toggle-label">Batch Upload</span>
+            <input id="batch-upload-toggle" name="batchUpload" type="checkbox" />
+            <span class="toggle-slider" aria-hidden="true"></span>
+          </label>
+        </div>
       </header>
 
       <main class="layout">
         <section class="panel panel-form">
           <h2>Submission</h2>
           <form id="verify-form" class="form">
-            <label class="field">
-              <span>Label image</span>
-              <input id="image" name="image" type="file" accept="image/*" required />
-            </label>
+            <p id="mode-description" class="subtle mode-description">
+              Upload one label image and enter the expected values manually.
+            </p>
 
-            <div class="field-grid">
+            <div id="single-upload-fields" class="mode-panel">
               <label class="field">
-                <span>Brand name</span>
-                <input id="brandName" name="brandName" type="text" placeholder="OLD TOM DISTILLERY" />
+                <span>Label image</span>
+                <input id="image" name="image" type="file" accept="image/*" required />
               </label>
 
-              <label class="field">
-                <span>Class/type</span>
+              <div class="field-grid">
+                <label class="field">
+                  <span>Brand name</span>
+                  <input id="brandName" name="brandName" type="text" placeholder="OLD TOM DISTILLERY" />
+                </label>
+
+                <label class="field">
+                  <span>Class/type</span>
+                  <input
+                    id="classType"
+                    name="classType"
+                    type="text"
+                    placeholder="Kentucky Straight Bourbon Whiskey"
+                  />
+                </label>
+
+                <label class="field">
+                  <span>Alcohol content</span>
+                  <input id="alcoholContent" name="alcoholContent" type="text" placeholder="45% Alc./Vol." />
+                </label>
+
+                <label class="field">
+                  <span>Net contents</span>
+                  <input id="netContents" name="netContents" type="text" placeholder="750 mL" />
+                </label>
+              </div>
+
+              <div class="field">
+                <span>Government warning</span>
+                <div class="static-warning" role="note">
+                  GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink
+                  alcoholic beverages during pregnancy because of the risk of birth defects. (2)
+                  Consumption of alcoholic beverages impairs your ability to drive a car or operate
+                  machinery, and may cause health problems.
+                </div>
                 <input
-                  id="classType"
-                  name="classType"
-                  type="text"
-                  placeholder="Kentucky Straight Bourbon Whiskey"
+                  id="governmentWarning"
+                  name="governmentWarning"
+                  type="hidden"
+                  value="GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
                 />
-              </label>
-
-              <label class="field">
-                <span>Alcohol content</span>
-                <input id="alcoholContent" name="alcoholContent" type="text" placeholder="45% Alc./Vol." />
-              </label>
-
-              <label class="field">
-                <span>Net contents</span>
-                <input id="netContents" name="netContents" type="text" placeholder="750 mL" />
-              </label>
+              </div>
             </div>
 
-            <div class="field">
-              <span>Government warning</span>
-              <div class="static-warning" role="note">
-                GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink
-                alcoholic beverages during pregnancy because of the risk of birth defects. (2)
-                Consumption of alcoholic beverages impairs your ability to drive a car or operate
-                machinery, and may cause health problems.
-              </div>
-              <input
-                id="governmentWarning"
-                name="governmentWarning"
-                type="hidden"
-                value="GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
-              />
+            <div id="batch-upload-fields" class="mode-panel mode-panel-hidden" hidden>
+              <label class="field">
+                <span>Image folder</span>
+                <input id="image-directory" name="imageDirectory" type="file" accept="image/*" webkitdirectory directory multiple />
+              </label>
+
+              <label class="field">
+                <span>Manifest JSON</span>
+                <input id="manifest-file" name="manifestFile" type="file" accept=".json,application/json" />
+              </label>
+
+              <label class="field">
+                <span>Batch status</span>
+                <textarea
+                  id="batch-status"
+                  class="status-log"
+                  rows="8"
+                  readonly
+                >Batch mode is available. Select an image folder and a manifest JSON file.</textarea>
+              </label>
             </div>
 
             <button id="submit-button" type="submit">Run OCR verification</button>
@@ -107,6 +144,12 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <div id="results-nav" class="results-nav results-nav-hidden" aria-label="Result navigation" hidden>
+            <button id="previous-result-button" type="button" class="secondary-button" disabled>Previous</button>
+            <p id="results-position" class="results-position">No results loaded</p>
+            <button id="next-result-button" type="button" class="secondary-button" disabled>Next</button>
           </div>
         </section>
       </main>
