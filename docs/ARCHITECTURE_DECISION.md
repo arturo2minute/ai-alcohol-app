@@ -1,47 +1,71 @@
-Synthetic AI-generated labels are stored under:
+# Architecture Decision
 
-`test-assets/labels/`
+This document explains how the prototype is built and why the main technical boundaries were chosen.
 
-The test-validation manifest file is stored at:
+## System Shape
 
-`test-assets/labels/manifest.json`
+- `frontend/` contains the browser UI built with Vite and vanilla JavaScript.
+- `backend/` contains the FastAPI service.
+- `backend/app/ocr.py` handles OCR extraction.
+- `backend/app/verifier.py` handles field extraction and deterministic comparison rules.
+- `backend/app/main.py` exposes the API endpoints and keeps request wiring thin.
 
-The test-validation manifest is the source of truth for automated label fixture validation.
+## Request Flow
 
-- `expectedFields` represents the fake application/COLA submission data.
-- `labelGroundTruth` represents what is intentionally printed on the synthetic label.
-- `scenarioCategory` classifies the fixture intent:
-  `baseline`, `negative_case`, or `ocr_stress`.
-- `ocrMustFind` represents text the OCR should ideally extract.
-- `acceptableOverallResults` identifies the allowed overall verification result states:
-  `pass`, `fail`, or `review_required`.
-- `expectedMismatchFields` identifies fields that should fail validation when the verifier can confidently detect them.
+### Single Label
 
-This test manifest is not the same thing as the planned end-user batch manifest.
+1. The browser submits one image and the expected field values to `POST /verify`.
+2. The backend runs OCR on the image.
+3. The backend extracts candidate field values from OCR output.
+4. The backend applies deterministic comparison rules.
+5. The backend returns per-field results and a summary.
 
-For batch-upload UX, the prototype will use a simpler manifest format that mirrors the manual submission form instead of the richer test-fixture schema. A sample batch manifest is stored at:
+### Batch Review
 
-`test-assets/labels/baseline/manifest.json`
+1. The browser reads the selected manifest file.
+2. The browser matches manifest paths against the selected image folder.
+3. The browser sends one `/verify` request per matched entry.
+4. The browser keeps the review state, including missing-file and request-error items.
 
-That sample batch manifest uses:
+## Major Decisions
 
-- `manifestVersion`
-- `entries[]`
-- `entries[].file`
-- `entries[].fields`
-- optional `entries[].submissionId`
-- optional `entries[].displayName`
+### Split Frontend And Backend
 
-Batch `file` values are expected to be exact relative paths from the folder selected by the user. Forward slashes should be used in manifest paths for consistency across environments.
+Decision:
+Use a separate browser client and API service.
 
-## Extraction Strategy
+Reason:
+This keeps UI concerns, OCR work, and verification logic separated and easy to inspect.
 
-The app uses a two-stage extraction pipeline.
+### Local OCR In The Backend
 
-The primary extraction path uses OCR because it is fast, inexpensive, and appropriate for reading printed label text.
+Decision:
+Run OCR locally inside the backend process using `rapidocr-onnxruntime`.
 
-If OCR produces missing fields, mismatches, or low-confidence results, the app can retry extraction using an AI-powered vision extractor. The AI fallback is used only to identify candidate field values from difficult images.
+Reason:
+Local OCR avoids dependence on external model services and keeps extraction close to the verification pipeline.
 
-Final verification is not delegated to the AI model. The backend applies deterministic comparison rules to the extracted values so the results remain explainable and auditable.
+### Deterministic Verification
 
-This design balances speed, cost, usability, and compliance review needs.
+Decision:
+Make the backend comparison rules the source of truth for `Match`, `Mismatch`, and `Needs Review`.
+
+Reason:
+The verification outcome needs to stay explainable and auditable even when OCR is noisy.
+
+### Frontend-Orchestrated Batch Processing
+
+Decision:
+Keep batch orchestration in the frontend and reuse the single-label backend endpoint.
+
+Reason:
+This reduces backend surface area and keeps the prototype implementation smaller.
+
+## Data Artifacts
+
+- End-user batch manifest example:
+  `test-assets/labels/baseline/manifest.json`
+- Automated test fixture manifest:
+  `test-assets/labels/manifest.json`
+
+These files serve different purposes and should not be treated as interchangeable.

@@ -1,48 +1,25 @@
 # Agent Context
 
-You are helping build a take-home coding assessment for the U.S. Treasury IT Specialist (AI) role.
+This document is a contributor guide for future implementation work in this repo. It should help an engineer or coding agent understand where the source of truth lives and how to make low-risk changes.
 
-The project is an AI-powered alcohol label verification prototype.
+## Read First
 
-Read these files before making changes:
-1. README.md
-2. docs/TREASURY_REQUIREMENTS.md
-3. docs/MVP_SCOPE.md
-4. docs/ACCEPTANCE_CRITERIA.md
-5. docs/ARCHITECTURE_DECISION.md
+1. `README.md`
+2. `docs/TREASURY_REQUIREMENTS.md`
+3. `docs/MVP_SCOPE.md`
+4. `docs/ACCEPTANCE_CRITERIA.md`
+5. `docs/ARCHITECTURE_DECISION.md`
+6. `docs/ASSUMPTIONS_AND_TRADEOFFS.md`
 
-## Operating Rules
-- Prioritize a working prototype over ambitious incomplete features.
-- Keep the UI simple, obvious, and usable by non-technical compliance agents.
-- Do not overbuild authentication, databases, or enterprise integrations.
-- Do not integrate with COLA.
-- Avoid storing uploaded files permanently unless clearly documented.
-- Keep code organized and easy to review.
-- Add comments only where they clarify non-obvious logic.
-- Maintain a clean README with setup, run, test, and deployment instructions.
+## Source Of Truth By Topic
 
-## Product Priorities
-1. Correct field verification.
-2. Simple UX.
-3. Fast response time.
-4. Clear mismatch reporting.
-5. Batch upload support if feasible.
-6. Honest limitations and assumptions.
-
-## Before Coding
-Produce a short implementation plan and identify the files you intend to create or modify.
-
-## After Coding
-Run the app locally if possible.
-Run tests if available.
-Update README and assumptions/tradeoffs.
-
-## Current Implementation Status
-- Frontend runs locally with Vite on `127.0.0.1:5173`.
-- Backend runs locally with FastAPI on `127.0.0.1:3001`.
-- VS Code debugging is configured in `.vscode/launch.json` for the backend.
-- `backend/app/main.py` is the FastAPI entry point and should stay thin.
-- OCR extraction lives in `backend/app/ocr.py`.
-- Verification logic lives in `backend/app/verifier.py`.
-- The backend now uses OCR-based detection instead of placeholder detected values.
-- The government warning is treated as a fixed standard value in the product and matched exactly, including case.
+- Requirements and stakeholder constraints:
+  `docs/TREASURY_REQUIREMENTS.md`
+- Current product scope:
+  `docs/MVP_SCOPE.md`
+- Behavior assumptions:
+  `docs/ASSUMPTIONS_AND_TRADEOFFS.md`
+- Technical structure:
+  `docs/ARCHITECTURE_DECISION.md`
+- Test and review checklist:
+  `docs/ACCEPTANCE_CRITERIA.md`

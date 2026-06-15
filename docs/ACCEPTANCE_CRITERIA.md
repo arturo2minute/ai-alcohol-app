@@ -1,41 +1,46 @@
 # Acceptance Criteria
 
-## Functional
-- User can upload at least one label image.
-- User can input expected application values.
-- If batch mode is enabled, user can select an image folder and one manifest JSON file.
-- App detects or extracts relevant text from the label.
-- App compares expected values against detected values.
-- App displays results clearly.
-- App flags mismatches and uncertain results.
-- App checks government warning more strictly than regular fields.
-- App can handle multiple labels or documents if implemented.
+Tester-facing checklist for deciding whether the prototype is working as intended.
+
+## Setup And Run
+
+- A tester can follow the README and start the backend locally.
+- A tester can follow the README and start the frontend locally.
+- The frontend can reach the backend health endpoint during local testing.
+
+## Single-Label Verification
+
+- A user can upload one label image.
+- A user can enter the expected values required by the UI.
+- Submitting the form returns a per-field verification result.
+- Each result row shows the field, expected value, detected value, status, and notes.
+- The app distinguishes among `Match`, `Mismatch`, and `Needs Review`.
+- The government warning is evaluated more strictly than the other fields.
+
+## Batch Verification
+
+- A user can enable batch mode.
+- A user can select one image folder and one manifest JSON file.
+- The app validates the manifest before running requests.
+- Missing files referenced by the manifest are reported clearly.
+- Request failures are reported clearly.
+- Verified items and error items can be reviewed one at a time.
 
 ## UX
-- Main action is obvious.
-- Results are readable without technical knowledge.
-- Error messages are understandable.
-- Batch manifest errors are described in plain language.
-- Loading state is visible.
-- User can tell what passed, failed, or needs review.
+
+- Result states are readable without technical knowledge.
+- Error messages use plain language.
+- Loading state is visible while verification is running.
+- A reviewer can tell which items passed, failed, or need follow-up.
 
 ## Engineering
-- App runs from documented setup instructions.
-- Code is organized by responsibility.
-- No unnecessary permanent storage of uploaded files.
-- Secrets are not committed.
-- Environment variables are documented.
-- README explains approach, tools, assumptions, and limitations.
 
-## Deployment
-- App is deployed to a public URL.
-- Deployed version can be tested by Treasury reviewers.
+- The app runs without requiring committed secrets.
+- Uploaded files are not stored permanently by default.
+- Documentation explains setup, scope, assumptions, and architecture.
+- The repo includes sample assets that let a tester exercise both single and batch flows.
 
-## Test Asset Validation
-- App can load or reference `test-assets/labels/manifest.json`.
-- Sample user-batch manifests can load or reference `test-assets/labels/baseline/manifest.json`.
-- Automated tests can iterate through manifest entries.
-- OCR output is checked against `ocrMustFind` where practical.
-- Verification output is checked against `acceptableOverallResults`.
-- Negative-case labels produce mismatches for fields listed in `expectedMismatchFields` when the verifier can confidently identify a failure.
-- OCR-stress labels may return `review_required` when OCR quality is insufficient.
+## Test Assets
+
+- The automated fixture manifest at `test-assets/labels/manifest.json` is present for backend-oriented validation.
+- The sample batch manifest at `test-assets/labels/baseline/manifest.json` is present for tester-facing batch flow validation.

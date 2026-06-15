@@ -1,51 +1,135 @@
 # AI Alcohol App
 
-Current status: working frontend/backend prototype with local OCR-based verification for single uploads and sequential batch review.
+OCR-based prototype for verifying alcohol label text against expected submission values.
 
-## Local Run
+Current implementation:
 
-Backend:
+- Frontend: Vite + vanilla JavaScript
+- Backend: FastAPI + Python
+- Extraction: local OCR with `rapidocr-onnxruntime`
+- Verification: deterministic backend rules
+- Batch mode: sequential review from a selected image folder plus manifest JSON
+
+## Tester Docs
+
+Use these docs for the project assumptions, scope, and architecture:
+
+- [Treasury requirements summary](docs/TREASURY_REQUIREMENTS.md)
+- [MVP scope](docs/MVP_SCOPE.md)
+- [Architecture decision](docs/ARCHITECTURE_DECISION.md)
+- [Assumptions and tradeoffs](docs/ASSUMPTIONS_AND_TRADEOFFS.md)
+- [Acceptance criteria](docs/ACCEPTANCE_CRITERIA.md)
+
+## Prerequisites
+
+Tested locally with:
+
+- Python `3.13.14`
+- Node `v24.14.1`
+- npm `11.11.0`
+
+You will also need:
+
+- PowerShell on Windows
+- Internet access during setup to install Python and npm dependencies
+
+## Setup From Scratch
+
+From the repo root:
+
+### 1. Backend setup
 
 ```powershell
 cd backend
 python -m venv .venv
-.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-python -m uvicorn app.main:app --reload --port 3001
 ```
 
-Frontend:
+### 2. Frontend setup
+
+Open a second terminal from the repo root:
 
 ```powershell
 cd frontend
 npm install
+```
+
+## Run Locally
+
+### 1. Start the backend
+
+From `backend/` with the virtual environment activated:
+
+```powershell
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 3001
+```
+
+The backend health endpoint is:
+
+`http://127.0.0.1:3001/health`
+
+### 2. Start the frontend
+
+From `frontend/`:
+
+```powershell
 npm run dev -- --host 127.0.0.1 --port 5173
 ```
 
-Open `http://127.0.0.1:5173`.
+Open:
 
-## Current Features
+`http://127.0.0.1:5173`
 
-- Upload one label image
-- Switch between single upload and batch upload modes
-- Manually enter expected fields
-- Select an image folder plus a manifest JSON file for batch review
-- Submit to backend `/verify`
-- Run local OCR on the uploaded label image
-- Display `Match` / `Mismatch` / `Needs Review` results
-- Step through batch results one label at a time, including missing-file and request-error items
-- Treat the government warning as a fixed standard value in the product
-- Check the full government warning as an exact, case-sensitive string match
-- Backend health check at `GET /health`
+## Environment Notes
 
-## Batch Upload
+The app runs locally without cloud APIs.
 
-1. Turn on `Batch Upload` in the header.
-2. Select the folder that directly matches the manifest paths.
+Optional environment variables:
+
+- Backend: `FRONTEND_ORIGIN`
+  Default: `http://localhost:5173,http://127.0.0.1:5173`
+- Frontend: `VITE_API_BASE_URL`
+  Default: `http://localhost:3001`
+
+If you change the frontend or backend host/port, update these values to match.
+
+
+
+## How To Test
+
+### Single label flow
+
+Note: You can find test files and their expected fields in test-assets\labels
+
+1. Start backend and frontend.
+2. Open the app in the browser.
+3. Leave `Batch Upload` turned off.
+4. Upload one label image.
+5. Enter expected values for:
+   - Brand Name
+   - Class/Type
+   - Alcohol Content
+   - Net Contents
+6. Submit the form and review the results table.
+
+### Batch flow
+
+1. Turn on `Batch Upload`.
+2. Select an image folder.
 3. Select one manifest JSON file.
-4. Run verification. The frontend submits labels one at a time and keeps a review trail for verified labels, missing files, and request failures.
+4. Run verification.
+5. Review results one label at a time with the Previous/Next controls.
 
-The manifest file must look like this:
+Sample batch assets live here:
+
+- Images: [`test-assets/labels/baseline/`](test-assets/labels/baseline/)
+- Sample user batch manifest: [`test-assets/labels/baseline/manifest.json`](test-assets/labels/baseline/manifest.json)
+
+## Batch Manifest Format
+
+The end-user batch manifest is intentionally simple:
 
 ```json
 {
@@ -68,135 +152,42 @@ The manifest file must look like this:
 
 Rules:
 
-- `manifestVersion` must be `1`.
-- `entries` must be a non-empty array.
-- Each entry must include `file`, `fields.brandName`, `fields.classType`, `fields.alcoholContent`, and `fields.netContents`.
-- `submissionId` and `displayName` are optional.
-- Manifest `file` values must use exact relative paths from the selected folder root and should use forward slashes.
+- `manifestVersion` must be `1`
+- `entries` must be a non-empty array
+- Each entry must include:
+  - `file`
+  - `fields.brandName`
+  - `fields.classType`
+  - `fields.alcoholContent`
+  - `fields.netContents`
+- `submissionId` and `displayName` are optional
+- Manifest `file` values must be exact relative paths from the selected folder root
+- Use forward slashes in manifest paths
 
 Example:
 
-- If you select `test-assets/labels/baseline`, the manifest should reference `bourbon-valid-01.png`.
-- If you select the parent folder instead, the manifest would need to reference `baseline/bourbon-valid-01.png`.
+- If you select `test-assets/labels/baseline`, the manifest should reference `bourbon-valid-01.png`
+- If you select `test-assets/labels`, the manifest should reference `baseline/bourbon-valid-01.png`
 
-## Current Limitations
+## Tests
 
-- No AI extraction yet
-- No persistence
-- OCR still produces noisy text on some images, so edge cases may return `Needs Review` or extra mismatches
-- Batch processing is sequential, not parallel
-- Batch orchestration happens in the frontend; there is no backend batch API
-- Frontend is JavaScript; backend is FastAPI/Python
-
-## Backend Tests
-
-From the repo root:
+After backend dependencies are installed:
 
 ```powershell
 cd backend
 .\.venv\Scripts\python -m unittest discover -s tests -v
 ```
 
-# **Take-Home Project: AI-Powered Alcohol Label Verification App**
+Test assets and the richer fixture manifest used by automated tests live under:
 
-## **Project Background & Stakeholder Context**
+- [`test-assets/labels/`](test-assets/labels/)
+- [`test-assets/labels/manifest.json`](test-assets/labels/manifest.json)
 
-*The following document contains notes from our discovery sessions with the Compliance Division, along with technical requirements for the prototype. We've included stakeholder feedback to give you context on how this tool will be used.*
+## Current Behavior
 
-### **Interview Notes: Sarah Chen, Deputy Director of Label Compliance**
-
-"TTB reviews about 150,000 label applications a year. Our team of 47 agents handles all of them.
-
-The actual review process:
- An agent pulls up an application, looks at the label artwork, and checks that what's on the label matches what's in the application. Brand name matches? Check. ABV is correct? Check. Government warning is there? Check. It takes maybe 5-10 minutes per application for a simple one, longer if there are issues.
-
-This is what got leadership interested in AI—a lot of what we do is just matching. Just making sure the number on the form is the same as the number on the label. My agents spend half their day doing what's essentially data entry verification.
-
-We tried a pilot with the scanning vendor last year. Disaster. The system would take 30, 40 seconds sometimes to process a single label. Our agents just went back to doing it by eye because they could do five labels in the time it took the machine to do one. **If we can't get results back in about 5 seconds, nobody's going to use it.**
-
-The agents really vary in their tech comfort level. Dave's been here since for 25 years and still prints his emails. Meanwhile, Jenny's fresh out of college and probably could have built this tool herself. We need something an old lady can use. Half our team is over 50. Clean, obvious, no hunting for buttons.
-
-We get these big importers who dump 200, 300 label applications on us at once. Right now we literally have to process them one at a time. If there was some way to **handle batch uploads**, that would be huge."
-
-### **Interview Notes: Marcus Williams, IT Systems Administrator**
-
-"Technical landscape:
-
-Our current infrastructure is government infrastructure. We're on Azure now after the migration in 2019.
-
-The COLA system is built on .NET.
-
-For this prototype, we're not looking to integrate with COLA directly. Think of this as a standalone proof-of-concept that could potentially inform future procurement decisions.
-
-Security-wise, just don't do anything crazy.
-
-Our network blocks outbound traffic to a lot of domains, so keep that in mind if you're thinking about cloud APIs. Our firewall blocks connections to ML endpoints."
-
-### **Interview Notes: Dave Morrison, Senior Compliance Agent (28 years)**
-
-"You can't just pattern match everything. I had one last week where the brand name was 'STONE'S THROW' on the label but 'Stone's Throw' in the application. Technically a mismatch? Sure. But it's obviously the same thing."
-
-### **Interview Notes: Jenny Park, Junior Compliance Agent (8 months)**
-
-"I literally have a printed checklist on my desk that I go through for every label. Brand name—check. ABV—check. Warning statement—check.
-
-The warning statement has to be **exact**. The 'GOVERNMENT WARNING:' part has to be in all caps and bold. I caught one last month where they used 'Government Warning' in title case instead of all caps. Rejected.
-
-The tool should handle images that aren't perfectly shot. I've seen labels that are photographed at weird angles, or the lighting is bad, or there's glare on the bottle. Right now if an agent can't read the label they just reject it and ask for a better image."
-
-## **Technical Requirements**
-
-You are free to use any programming languages, frameworks, or libraries you prefer. We want to see what kind of engineering, design, and integration decisions you make.
-
-## **Additional Context**
-
-### **About TTB Label Requirements**
-
-For reference, TTB requires specific information on alcohol beverage labels. The exact requirements vary by beverage type (beer, wine, distilled spirits) but common elements include:
-
-- Brand name
-- Class/type designation
-- Alcohol content (with some exceptions for certain wine/beer)
-- Net contents
-- Name and address of bottler/producer
-- Country of origin for imports
-- **Government Health Warning Statement** (mandatory on all alcohol beverages)
-
-We encourage you to review TTB's guidelines at ttb.gov for additional context on label requirements.
-
-### **Sample Label**
-
-Your app should handle labels containing information like the example below:
-
-**Example Distilled Spirits Label Fields:**
-
-- Brand Name: "OLD TOM DISTILLERY"
-- Class/Type: "Kentucky Straight Bourbon Whiskey"
-- Alcohol Content: "45% Alc./Vol. (90 Proof)"
-- Net Contents: "750 mL"
-- Government Warning: \[Standard government warning text\]
-
-*We encourage you to create or source additional test labels—AI image generation tools work well for this.*
-
-## **Deliverables**
-
-1. **Source Code Repository** (GitHub or similar)
-   - All source code
-   - README with setup and run instructions
-   - Brief documentation of approach, tools used, assumptions made
-2. **Deployed Application URL**
-   - Working prototype we can access and test
-
-## **Evaluation Criteria**
-
-- Correctness and completeness of core requirements
-- Code quality and organization
-- Appropriate technical choices for the scope
-- User experience and error handling
-- Attention to requirements
-- Creative problem-solving
-
-A working core application with clean code is preferred over ambitious but incomplete features. Document any trade-offs or limitations.
-
-*Questions? Reach out for clarification—though we also value how you fill in gaps independently.*
-```
+- Brand name and class/type use normalized comparisons with a `Needs Review` path for close OCR matches
+- Alcohol content and net contents use OCR-oriented normalization
+- Government warning uses stricter matching than the other fields
+- The full government warning is treated as a fixed required value in the product
+- Results are reported as `Match`, `Mismatch`, or `Needs Review`
+- Batch requests are processed sequentially in the frontend

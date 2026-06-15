@@ -1,37 +1,51 @@
-# Treasury Requirements Summary
+# Treasury Requirements
 
-## Core Problem
-Build a working prototype that helps compliance agents verify alcohol label information against submitted application fields.
+This document captures the problem the prototype is meant to solve and the external constraints it should respect
 
-## Core User
-TTB compliance agents reviewing alcohol label applications.
+## Problem Statement
 
-## Primary Use Case
-Agent uploads one or more label images and enters or uploads expected application data. The app extracts or identifies label fields and compares them against expected values.
+Build a prototype that helps TTB compliance agents verify alcohol label artwork against submitted application values.
 
-## Must-Have Features
-- Upload alcohol label image.
-- Enter expected application fields.
-- Extract/check:
-  - Brand name
-  - Class/type
-  - Alcohol content
-  - Net contents
-  - Government warning
-- Show pass/fail/mismatch results clearly.
-- Keep UI simple and obvious.
-- Return results quickly, target approximately 5 seconds per label where possible.
-- Support batch upload if feasible within time.
+## Primary User
 
-## Important Stakeholder Constraints
-- Standalone proof of concept; no COLA integration.
-- Avoid unnecessary sensitive-data storage.
-- Cloud APIs may be a risk because government networks can block outbound ML endpoints.
-- Warning statement must be checked strictly.
-- Brand-name comparison should allow reasonable normalization, such as capitalization differences.
+TTB compliance agents reviewing label submissions.
+
+## Core Workflow
+
+1. The reviewer provides a label image.
+2. The reviewer provides the expected submission values.
+3. The app extracts or identifies relevant label text.
+4. The app compares detected values against expected values.
+5. The app presents clear results for review.
+
+## Required Verification Areas
+
+- Brand name
+- Class or type
+- Alcohol content
+- Net contents
+- Government warning
+
+## Product Expectations
+
+- The interface should be simple enough for non-technical reviewers.
+- Results should be returned quickly enough to be practical in a review workflow.
+- Mismatches and uncertain cases should be obvious.
+- Batch processing is valuable if feasible within prototype scope.
+
+## Constraints
+
+- Treat this as a standalone proof of concept.
+- Do not integrate with COLA for this build.
+- Avoid unnecessary storage of uploaded files or sensitive data.
+- Expect restricted network environments where outbound ML endpoints may be blocked.
+- Apply stricter handling to the government warning than to general fields.
+- Allow reasonable normalization for fields like brand name when differences are cosmetic.
 
 ## Deliverables
-- Source code repository.
-- README with setup/run instructions.
-- Brief documentation of approach, tools, assumptions.
-- Deployed working prototype URL.
+
+- Source repository
+- Runnable application
+- README with setup and run instructions
+- Documentation for scope, assumptions, and architecture
+- Public deployment URL if deployment is completed

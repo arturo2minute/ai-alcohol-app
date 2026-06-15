@@ -1,59 +1,58 @@
 # MVP Scope
 
-## Build First
-A simple web app that allows a user to:
-1. Upload one or more alcohol label images.
-2. Enter expected application values manually.
-3. Optionally switch to a batch mode that accepts an image folder plus a JSON manifest of expected values.
-4. Run label verification.
-5. View a clear result table:
-   - Field
-   - Expected value
-   - Detected value
-   - Status: Match / Mismatch / Needs Review
-   - Notes
+This document defines what the current prototype is intended to do. It describes committed product behavior, not the background requirements or the implementation rationale.
 
-## Verification Logic
-### Primary Path
-- Use OCR to detect text from the label.
-- Normalize general fields for comparison:
-  - Case-insensitive brand match
-  - Ignore extra whitespace
-  - Normalize punctuation where reasonable
-- Use stricter matching for government warning:
-  - Required text must be present.
-  - `GOVERNMENT WARNING:` must be uppercase.
-  - For this prototype, the warning is treated as a fixed standard value rather than a user-entered freeform field.
-  - For this prototype, the full warning is checked as an exact, case-sensitive string match.
-  - Flag warning as mismatch if wording is incomplete, casing differs, or text is materially changed.
+## In Scope
 
-### AI Fallback Path
-- Trigger AI-powered extraction when:
-  - OCR misses required fields
-  - OCR confidence is low
-  - OCR result produces mismatches
-  - government warning is incomplete or unclear
+- Single-label verification from one uploaded image
+- Manual entry of expected values for:
+  - brand name
+  - class or type
+  - alcohol content
+  - net contents
+- OCR-based text extraction
+- Deterministic field comparison in the backend
+- Per-field results with:
+  - expected value
+  - detected value
+  - status
+  - notes
+- Result states:
+  - `Match`
+  - `Mismatch`
+  - `Needs Review`
+- Batch mode that accepts:
+  - one selected image folder
+  - one manifest JSON file
+- Sequential batch review with navigation between result items
+- Plain-language error handling for bad manifests, missing files, and request failures
 
-### Verification Rule
-- AI does not make the compliance decision. AI only extracts candidate values. The backend comparison service determines Match, Mismatch, or Needs Review.
+## Verification Rules In Scope
 
-## Batch Upload
-- Support multiple images if practical.
-- For the prototype, use one manifest JSON file as the source of truth for batch processing.
-- Match manifest file paths exactly against the selected folder contents.
-- Ignore extra images that are not referenced by the manifest.
-- If a manifest-listed image is missing, report that clearly to the user instead of failing silently.
-- If full async batch processing is too much, process files sequentially and show per-file results.
-- Keep error messaging plain enough for non-technical users.
+- General fields are normalized before comparison where reasonable.
+- Brand and class or type may return `Needs Review` for close OCR matches.
+- Alcohol content and net contents use OCR-oriented normalization.
+- Government warning is treated more strictly than other fields.
+- The government warning is treated as a fixed required value in the product.
 
-## Defer
-- No COLA integration.
-- No user authentication unless deployment requires it.
-- No database unless needed.
-- No long-term file storage.
-- No complex federal compliance implementation.
-- No perfect image correction for glare/skew.
-- No advanced model training.
+## Explicitly Out Of Scope
 
-## Success Definition
-Working, deployed, understandable prototype with clean code and honest documentation.
+- COLA integration
+- User authentication
+- Database or long-term persistence
+- Permanent file storage
+- Full federal compliance coverage beyond the chosen prototype fields
+- Advanced image correction for glare, skew, or poor photography
+- Model training or tuning
+- Backend-native parallel or asynchronous batch processing
+
+## Deferred Candidates
+
+- AI vision fallback for hard OCR cases
+- Upstream ingestion from a real submission system
+- Dedicated backend batch API
+- Deployment hardening for production use
+
+## Success Standard
+
+The MVP is successful if a reviewer can run the app, verify a label, understand the outcome, and see honest limits when the OCR or comparison logic is uncertain.
