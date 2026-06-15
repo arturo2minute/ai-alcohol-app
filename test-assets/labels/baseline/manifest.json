@@ -1,0 +1,71 @@
+{
+  "manifestVersion": 1,
+  "entries": [
+    {
+      "submissionId": "BASELINE-001",
+      "displayName": "Valid Bourbon Label",
+      "file": "bourbon-valid-01.png",
+      "fields": {
+        "brandName": "OLD TOM DISTILLERY",
+        "classType": "Kentucky Straight Bourbon Whiskey",
+        "alcoholContent": "45% Alc./Vol. (90 Proof)",
+        "netContents": "750 mL"
+      }
+    },
+    {
+      "submissionId": "BASELINE-002",
+      "displayName": "Valid Wine Label",
+      "file": "wine-valid-01.png",
+      "fields": {
+        "brandName": "CASCADE RIDGE CELLARS",
+        "classType": "Red Table Wine",
+        "alcoholContent": "13.5% Alc./Vol.",
+        "netContents": "750 mL"
+      }
+    },
+    {
+      "submissionId": "BASELINE-003",
+      "displayName": "Valid Beer Label",
+      "file": "beer-valid-01.png",
+      "fields": {
+        "brandName": "NORTH FORK BREWING CO.",
+        "classType": "India Pale Ale",
+        "alcoholContent": "6.8% Alc./Vol.",
+        "netContents": "12 FL OZ"
+      }
+    },
+    {
+      "submissionId": "BASELINE-004",
+      "displayName": "Valid Bourbon Alt Format Label",
+      "file": "valid-bourbon-alt-format-01.png",
+      "fields": {
+        "brandName": "HARBOR LIGHT DISTILLING",
+        "classType": "Straight Bourbon Whiskey",
+        "alcoholContent": "47% Alc./Vol. (94 Proof)",
+        "netContents": "750 mL"
+      }
+    },
+    {
+      "submissionId": "BASELINE-005",
+      "displayName": "Valid White Wine Label",
+      "file": "valid-wine-white-01.png",
+      "fields": {
+        "brandName": "SILVER PINE VINEYARDS",
+        "classType": "Chardonnay",
+        "alcoholContent": "14.1% Alc./Vol.",
+        "netContents": "750 mL"
+      }
+    },
+    {
+      "submissionId": "BASELINE-006",
+      "displayName": "Valid Beer Stout Label",
+      "file": "valid-beer-stout-01.png",
+      "fields": {
+        "brandName": "IRON BRIDGE BREWING",
+        "classType": "Oatmeal Stout",
+        "alcoholContent": "5.9% Alc./Vol.",
+        "netContents": "16 FL OZ"
+      }
+    }
+  ]
+}

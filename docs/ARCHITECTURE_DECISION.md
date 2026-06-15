@@ -2,11 +2,11 @@ Synthetic AI-generated labels are stored under:
 
 `test-assets/labels/`
 
-The manifest file is stored at:
+The test-validation manifest file is stored at:
 
 `test-assets/labels/manifest.json`
 
-The manifest is the validation source of truth for test labels.
+The test-validation manifest is the source of truth for automated label fixture validation.
 
 - `expectedFields` represents the fake application/COLA submission data.
 - `labelGroundTruth` represents what is intentionally printed on the synthetic label.
@@ -16,6 +16,23 @@ The manifest is the validation source of truth for test labels.
 - `acceptableOverallResults` identifies the allowed overall verification result states:
   `pass`, `fail`, or `review_required`.
 - `expectedMismatchFields` identifies fields that should fail validation when the verifier can confidently detect them.
+
+This test manifest is not the same thing as the planned end-user batch manifest.
+
+For batch-upload UX, the prototype will use a simpler manifest format that mirrors the manual submission form instead of the richer test-fixture schema. A sample batch manifest is stored at:
+
+`test-assets/labels/baseline/manifest.json`
+
+That sample batch manifest uses:
+
+- `manifestVersion`
+- `entries[]`
+- `entries[].file`
+- `entries[].fields`
+- optional `entries[].submissionId`
+- optional `entries[].displayName`
+
+Batch `file` values are expected to be exact relative paths from the folder selected by the user. Forward slashes should be used in manifest paths for consistency across environments.
 
 ## Extraction Strategy
 

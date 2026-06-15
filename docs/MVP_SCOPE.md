@@ -4,8 +4,9 @@
 A simple web app that allows a user to:
 1. Upload one or more alcohol label images.
 2. Enter expected application values manually.
-3. Run label verification.
-4. View a clear result table:
+3. Optionally switch to a batch mode that accepts an image folder plus a JSON manifest of expected values.
+4. Run label verification.
+5. View a clear result table:
    - Field
    - Expected value
    - Detected value
@@ -38,7 +39,12 @@ A simple web app that allows a user to:
 
 ## Batch Upload
 - Support multiple images if practical.
+- For the prototype, use one manifest JSON file as the source of truth for batch processing.
+- Match manifest file paths exactly against the selected folder contents.
+- Ignore extra images that are not referenced by the manifest.
+- If a manifest-listed image is missing, report that clearly to the user instead of failing silently.
 - If full async batch processing is too much, process files sequentially and show per-file results.
+- Keep error messaging plain enough for non-technical users.
 
 ## Defer
 - No COLA integration.

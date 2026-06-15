@@ -3,6 +3,7 @@
 ## Functional
 - User can upload at least one label image.
 - User can input expected application values.
+- If batch mode is enabled, user can select an image folder and one manifest JSON file.
 - App detects or extracts relevant text from the label.
 - App compares expected values against detected values.
 - App displays results clearly.
@@ -14,6 +15,7 @@
 - Main action is obvious.
 - Results are readable without technical knowledge.
 - Error messages are understandable.
+- Batch manifest errors are described in plain language.
 - Loading state is visible.
 - User can tell what passed, failed, or needs review.
 
@@ -31,6 +33,7 @@
 
 ## Test Asset Validation
 - App can load or reference `test-assets/labels/manifest.json`.
+- Sample user-batch manifests can load or reference `test-assets/labels/baseline/manifest.json`.
 - Automated tests can iterate through manifest entries.
 - OCR output is checked against `ocrMustFind` where practical.
 - Verification output is checked against `acceptableOverallResults`.
