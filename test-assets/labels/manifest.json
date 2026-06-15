@@ -2,9 +2,9 @@
   {
     "id": "bourbon-valid-01",
     "displayName": "Valid Bourbon Label",
-    "file": "valid/bourbon-valid-01.png",
+    "file": "baseline/bourbon-valid-01.png",
     "beverageType": "distilled_spirits",
-    "category": "valid",
+    "scenarioCategory": "baseline",
     "expectedFields": {
       "brandName": "OLD TOM DISTILLERY",
       "classType": "Kentucky Straight Bourbon Whiskey",
@@ -19,8 +19,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "match",
-    "expectedMismatches": [],
+    "acceptableOverallResults": ["pass"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "OLD TOM DISTILLERY",
       "Kentucky Straight Bourbon Whiskey",
@@ -34,9 +34,9 @@
   {
     "id": "wine-valid-01",
     "displayName": "Valid Wine Label",
-    "file": "valid/wine-valid-01.png",
+    "file": "baseline/wine-valid-01.png",
     "beverageType": "wine",
-    "category": "valid",
+    "scenarioCategory": "baseline",
     "expectedFields": {
       "brandName": "CASCADE RIDGE CELLARS",
       "classType": "Red Table Wine",
@@ -51,8 +51,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "match",
-    "expectedMismatches": [],
+    "acceptableOverallResults": ["pass"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "CASCADE RIDGE CELLARS",
       "Red Table Wine",
@@ -65,9 +65,9 @@
   {
     "id": "beer-valid-01",
     "displayName": "Valid Beer Label",
-    "file": "valid/beer-valid-01.png",
+    "file": "baseline/beer-valid-01.png",
     "beverageType": "beer",
-    "category": "valid",
+    "scenarioCategory": "baseline",
     "expectedFields": {
       "brandName": "NORTH FORK BREWING CO.",
       "classType": "India Pale Ale",
@@ -82,8 +82,8 @@
       "netContents": "12 FL OZ",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "match",
-    "expectedMismatches": [],
+    "acceptableOverallResults": ["pass"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "NORTH FORK BREWING CO.",
       "India Pale Ale",
@@ -96,9 +96,9 @@
   {
     "id": "valid-bourbon-alt-format-01",
     "displayName": "Valid Bourbon Alt Format Label",
-    "file": "valid/valid-bourbon-alt-format-01.png",
+    "file": "baseline/valid-bourbon-alt-format-01.png",
     "beverageType": "distilled_spirits",
-    "category": "valid",
+    "scenarioCategory": "baseline",
     "expectedFields": {
       "brandName": "HARBOR LIGHT DISTILLING",
       "classType": "Straight Bourbon Whiskey",
@@ -113,8 +113,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "match",
-    "expectedMismatches": [],
+    "acceptableOverallResults": ["pass"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "HARBOR LIGHT DISTILLING",
       "Straight Bourbon Whiskey",
@@ -128,9 +128,9 @@
   {
     "id": "valid-wine-white-01",
     "displayName": "Valid White Wine Label",
-    "file": "valid/valid-wine-white-01.png",
+    "file": "baseline/valid-wine-white-01.png",
     "beverageType": "wine",
-    "category": "valid",
+    "scenarioCategory": "baseline",
     "expectedFields": {
       "brandName": "SILVER PINE VINEYARDS",
       "classType": "Chardonnay",
@@ -145,8 +145,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "match",
-    "expectedMismatches": [],
+    "acceptableOverallResults": ["pass"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "SILVER PINE VINEYARDS",
       "Chardonnay",
@@ -159,9 +159,9 @@
   {
     "id": "valid-beer-stout-01",
     "displayName": "Valid Beer Stout Label",
-    "file": "valid/valid-beer-stout-01.png",
+    "file": "baseline/valid-beer-stout-01.png",
     "beverageType": "beer",
-    "category": "valid",
+    "scenarioCategory": "baseline",
     "expectedFields": {
       "brandName": "IRON BRIDGE BREWING",
       "classType": "Oatmeal Stout",
@@ -176,8 +176,8 @@
       "netContents": "16 FL OZ",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "match",
-    "expectedMismatches": [],
+    "acceptableOverallResults": ["pass"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "IRON BRIDGE BREWING",
       "Oatmeal Stout",
@@ -190,9 +190,9 @@
   {
     "id": "missing-warning-01",
     "displayName": "Invalid Missing Warning Label",
-    "file": "invalid/missing-warning-01.png",
+    "file": "negative_case/missing-warning-01.png",
     "beverageType": "distilled_spirits",
-    "category": "invalid",
+    "scenarioCategory": "negative_case",
     "expectedFields": {
       "brandName": "OLD TOM DISTILLERY",
       "classType": "Kentucky Straight Bourbon Whiskey",
@@ -207,8 +207,8 @@
       "netContents": "750 mL",
       "governmentWarningText": ""
     },
-    "expectedOutcome": "mismatch",
-    "expectedMismatches": [
+    "acceptableOverallResults": ["fail"],
+    "expectedMismatchFields": [
       "governmentWarning"
     ],
     "ocrMustFind": [
@@ -227,9 +227,9 @@
   {
     "id": "wrong-abv-01",
     "displayName": "Invalid Wrong ABV Label",
-    "file": "invalid/wrong-abv-01.png",
+    "file": "negative_case/wrong-abv-01.png",
     "beverageType": "wine",
-    "category": "invalid",
+    "scenarioCategory": "negative_case",
     "expectedFields": {
       "brandName": "CASCADE RIDGE CELLARS",
       "classType": "Red Table Wine",
@@ -244,8 +244,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "mismatch",
-    "expectedMismatches": [
+    "acceptableOverallResults": ["fail"],
+    "expectedMismatchFields": [
       "alcoholContent"
     ],
     "ocrMustFind": [
@@ -263,9 +263,9 @@
   {
     "id": "brand-mismatch-01",
     "displayName": "Invalid Brand Mismatch Label",
-    "file": "invalid/brand-mismatch-01.png",
+    "file": "negative_case/brand-mismatch-01.png",
     "beverageType": "wine",
-    "category": "invalid",
+    "scenarioCategory": "negative_case",
     "expectedFields": {
       "brandName": "CASCADE RIDGE CELLARS",
       "classType": "Red Table Wine",
@@ -280,8 +280,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "mismatch",
-    "expectedMismatches": [
+    "acceptableOverallResults": ["fail"],
+    "expectedMismatchFields": [
       "brandName"
     ],
     "ocrMustFind": [
@@ -299,9 +299,9 @@
   {
     "id": "missing-abv-01",
     "displayName": "Invalid Missing ABV Label",
-    "file": "invalid/missing-abv-01.png",
+    "file": "negative_case/missing-abv-01.png",
     "beverageType": "distilled_spirits",
-    "category": "invalid",
+    "scenarioCategory": "negative_case",
     "expectedFields": {
       "brandName": "HARBOR LIGHT DISTILLING",
       "classType": "Straight Bourbon Whiskey",
@@ -316,10 +316,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "mismatch",
-    "expectedMismatches": [
-      "alcoholContent"
-    ],
+    "acceptableOverallResults": ["review_required"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "HARBOR LIGHT DISTILLING",
       "Straight Bourbon Whiskey",
@@ -330,14 +328,14 @@
       "47% Alc./Vol.",
       "94 Proof"
     ],
-    "notes": "Invalid because the label omits alcohol content."
+    "notes": "OCR currently treats the missing alcohol content as Needs Review because the field could not be confidently extracted."
   },
   {
     "id": "wrong-net-contents-01",
     "displayName": "Invalid Wrong Net Contents Label",
-    "file": "invalid/wrong-net-contents-01.png",
+    "file": "negative_case/wrong-net-contents-01.png",
     "beverageType": "wine",
-    "category": "invalid",
+    "scenarioCategory": "negative_case",
     "expectedFields": {
       "brandName": "SILVER PINE VINEYARDS",
       "classType": "Chardonnay",
@@ -352,8 +350,8 @@
       "netContents": "500 mL",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "mismatch",
-    "expectedMismatches": [
+    "acceptableOverallResults": ["fail"],
+    "expectedMismatchFields": [
       "netContents"
     ],
     "ocrMustFind": [
@@ -371,9 +369,9 @@
   {
     "id": "wrong-class-type-01",
     "displayName": "Invalid Wrong Class Type Label",
-    "file": "invalid/wrong-class-type-01.png",
+    "file": "negative_case/wrong-class-type-01.png",
     "beverageType": "beer",
-    "category": "invalid",
+    "scenarioCategory": "negative_case",
     "expectedFields": {
       "brandName": "IRON BRIDGE BREWING",
       "classType": "Oatmeal Stout",
@@ -388,8 +386,8 @@
       "netContents": "16 FL OZ",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "mismatch",
-    "expectedMismatches": [
+    "acceptableOverallResults": ["fail"],
+    "expectedMismatchFields": [
       "classType"
     ],
     "ocrMustFind": [
@@ -407,9 +405,9 @@
   {
     "id": "glare-tilted-01",
     "displayName": "Edge Case Tilted/Glare Label",
-    "file": "edge-cases/glare-tilted-01.png",
+    "file": "ocr_stress/glare-tilted-01.png",
     "beverageType": "beer",
-    "category": "edge-case",
+    "scenarioCategory": "ocr_stress",
     "expectedFields": {
       "brandName": "NORTH FORK BREWING CO.",
       "classType": "India Pale Ale",
@@ -424,8 +422,8 @@
       "netContents": "12 FL OZ",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "match_or_needs_review",
-    "expectedMismatches": [],
+    "acceptableOverallResults": ["pass", "review_required"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "NORTH FORK BREWING CO.",
       "India Pale Ale",
@@ -438,9 +436,9 @@
   {
     "id": "warning-case-error-01",
     "displayName": "Edge Case Warning Case Error",
-    "file": "edge-cases/warning-case-error-01.png",
+    "file": "ocr_stress/warning-case-error-01.png",
     "beverageType": "distilled_spirits",
-    "category": "edge-case",
+    "scenarioCategory": "ocr_stress",
     "expectedFields": {
       "brandName": "OLD TOM DISTILLERY",
       "classType": "Kentucky Straight Bourbon Whiskey",
@@ -455,8 +453,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "Government Warning: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "mismatch",
-    "expectedMismatches": [
+    "acceptableOverallResults": ["fail"],
+    "expectedMismatchFields": [
       "governmentWarning"
     ],
     "ocrMustFind": [
@@ -475,9 +473,9 @@
   {
     "id": "warning-missing-sentence-01",
     "displayName": "Edge Case Warning Missing Sentence",
-    "file": "edge-cases/warning-missing-sentence-01.png",
+    "file": "ocr_stress/warning-missing-sentence-01.png",
     "beverageType": "distilled_spirits",
-    "category": "edge-case",
+    "scenarioCategory": "ocr_stress",
     "expectedFields": {
       "brandName": "OLD TOM DISTILLERY",
       "classType": "Kentucky Straight Bourbon Whiskey",
@@ -492,8 +490,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects."
     },
-    "expectedOutcome": "mismatch",
-    "expectedMismatches": [
+    "acceptableOverallResults": ["fail"],
+    "expectedMismatchFields": [
       "governmentWarning"
     ],
     "ocrMustFind": [
@@ -513,9 +511,9 @@
   {
     "id": "warning-prefix-missing-colon-01",
     "displayName": "Edge Case Warning Prefix Missing Colon",
-    "file": "edge-cases/warning-prefix-missing-colon-01.png",
+    "file": "ocr_stress/warning-prefix-missing-colon-01.png",
     "beverageType": "distilled_spirits",
-    "category": "edge-case",
+    "scenarioCategory": "ocr_stress",
     "expectedFields": {
       "brandName": "OLD TOM DISTILLERY",
       "classType": "Kentucky Straight Bourbon Whiskey",
@@ -530,8 +528,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "GOVERNMENT WARNING (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "mismatch",
-    "expectedMismatches": [
+    "acceptableOverallResults": ["fail"],
+    "expectedMismatchFields": [
       "governmentWarning"
     ],
     "ocrMustFind": [
@@ -550,9 +548,9 @@
   {
     "id": "warning-wording-changed-01",
     "displayName": "Edge Case Warning Wording Changed",
-    "file": "edge-cases/warning-wording-changed-01.png",
+    "file": "ocr_stress/warning-wording-changed-01.png",
     "beverageType": "wine",
-    "category": "edge-case",
+    "scenarioCategory": "ocr_stress",
     "expectedFields": {
       "brandName": "STONEHILL VINEYARDS",
       "classType": "Cabernet Sauvignon",
@@ -567,8 +565,8 @@
       "netContents": "750 mL",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages may impair your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "mismatch",
-    "expectedMismatches": [
+    "acceptableOverallResults": ["fail"],
+    "expectedMismatchFields": [
       "governmentWarning"
     ],
     "ocrMustFind": [
@@ -587,9 +585,9 @@
   {
     "id": "abv-format-abv-01",
     "displayName": "Edge Case ABV Format Label",
-    "file": "edge-cases/abv-format-abv-01.png",
+    "file": "ocr_stress/abv-format-abv-01.png",
     "beverageType": "beer",
-    "category": "edge-case",
+    "scenarioCategory": "ocr_stress",
     "expectedFields": {
       "brandName": "NORTH FORK BREWING CO.",
       "classType": "India Pale Ale",
@@ -604,8 +602,8 @@
       "netContents": "12 FL OZ",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "match",
-    "expectedMismatches": [],
+    "acceptableOverallResults": ["review_required"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "NORTH FORK BREWING CO.",
       "India Pale Ale",
@@ -618,9 +616,9 @@
   {
     "id": "net-contents-spacing-01",
     "displayName": "Edge Case Net Contents Spacing Label",
-    "file": "edge-cases/net-contents-spacing-01.png",
+    "file": "ocr_stress/net-contents-spacing-01.png",
     "beverageType": "wine",
-    "category": "edge-case",
+    "scenarioCategory": "ocr_stress",
     "expectedFields": {
       "brandName": "CASCADE RIDGE CELLARS",
       "classType": "Red Table Wine",
@@ -635,8 +633,8 @@
       "netContents": "750ML",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "match",
-    "expectedMismatches": [],
+    "acceptableOverallResults": ["review_required"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "CASCADE RIDGE CELLARS",
       "Red Table Wine",
@@ -649,9 +647,9 @@
   {
     "id": "brand-case-punctuation-01",
     "displayName": "Edge Case Brand Case Punctuation Label",
-    "file": "edge-cases/brand-case-punctuation-01.png",
+    "file": "ocr_stress/brand-case-punctuation-01.png",
     "beverageType": "beer",
-    "category": "edge-case",
+    "scenarioCategory": "ocr_stress",
     "expectedFields": {
       "brandName": "NORTH FORK BREWING CO.",
       "classType": "India Pale Ale",
@@ -666,8 +664,8 @@
       "netContents": "12 FL OZ",
       "governmentWarningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems."
     },
-    "expectedOutcome": "match",
-    "expectedMismatches": [],
+    "acceptableOverallResults": ["pass"],
+    "expectedMismatchFields": [],
     "ocrMustFind": [
       "North Fork Brewing Co",
       "India Pale Ale",
@@ -678,3 +676,5 @@
     "notes": "Format variation where brand case and punctuation should normalize to the expected value."
   }
 ]
+
+

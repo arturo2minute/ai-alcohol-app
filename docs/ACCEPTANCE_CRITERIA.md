@@ -33,6 +33,6 @@
 - App can load or reference `test-assets/labels/manifest.json`.
 - Automated tests can iterate through manifest entries.
 - OCR output is checked against `ocrMustFind` where practical.
-- Verification output is checked against `expectedOutcome`.
-- Invalid labels produce mismatches for fields listed in `expectedMismatches`.
-- Edge-case labels may return Needs Review when OCR quality is insufficient.
+- Verification output is checked against `acceptableOverallResults`.
+- Negative-case labels produce mismatches for fields listed in `expectedMismatchFields` when the verifier can confidently identify a failure.
+- OCR-stress labels may return `review_required` when OCR quality is insufficient.

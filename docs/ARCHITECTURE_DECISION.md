@@ -10,9 +10,12 @@ The manifest is the validation source of truth for test labels.
 
 - `expectedFields` represents the fake application/COLA submission data.
 - `labelGroundTruth` represents what is intentionally printed on the synthetic label.
+- `scenarioCategory` classifies the fixture intent:
+  `baseline`, `negative_case`, or `ocr_stress`.
 - `ocrMustFind` represents text the OCR should ideally extract.
-- `expectedOutcome` represents the expected final verification result.
-- `expectedMismatches` identifies fields that should fail validation.
+- `acceptableOverallResults` identifies the allowed overall verification result states:
+  `pass`, `fail`, or `review_required`.
+- `expectedMismatchFields` identifies fields that should fail validation when the verifier can confidently detect them.
 
 ## Extraction Strategy
 

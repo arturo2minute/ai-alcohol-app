@@ -19,8 +19,9 @@ STANDARD_GOVERNMENT_WARNING = (
 )
 
 WARNING_PLACEHOLDER_TEXT = "Placeholder warning text requires OCR validation"
-ALCOHOL_PATTERN = re.compile(r"(alc\.?\s*/?\s*vol|proof\b)", re.IGNORECASE)
+ALCOHOL_PATTERN = re.compile(r"(abv\b|alc\.?\s*/?\s*vol|proof\b)", re.IGNORECASE)
 NET_CONTENTS_PATTERN = re.compile(r"(ml|fl\s*oz|floz)", re.IGNORECASE)
+WARNING_END_PATTERN = re.compile(r"health problems[.!?]?", re.IGNORECASE)
 
 BRAND_CLASS_REVIEW_THRESHOLD = 0.92
 NET_CONTENTS_REVIEW_THRESHOLD = 0.90
@@ -82,7 +83,7 @@ def build_warning_result(field_definition, expected_value, detected_value):
             "notes": "Detected warning does not use the uppercase 'GOVERNMENT WARNING:' prefix.",
         }
 
-    if expected_value == detected_value:
+    if normalize_warning_text_for_comparison(expected_value) == normalize_warning_text_for_comparison(detected_value):
         return {
             "field": field_definition["label"],
             "expectedValue": expected_value,
@@ -138,6 +139,8 @@ def build_verification_results(expected_fields, detected_fields):
 
 
 def build_verification_result_row(field_definition, expected_value, detected_value):
+    field_key = field_definition["key"]
+
     if not expected_value:
         return {
             "field": field_definition["label"],
@@ -147,7 +150,7 @@ def build_verification_result_row(field_definition, expected_value, detected_val
             "notes": "No expected value provided.",
         }
 
-    if field_definition["key"] == "governmentWarning":
+    if field_key == "governmentWarning":
         return build_warning_result(field_definition, expected_value, detected_value)
 
     if not detected_value:
@@ -159,7 +162,10 @@ def build_verification_result_row(field_definition, expected_value, detected_val
             "notes": "OCR could not confidently extract this field.",
         }
 
-    normalized_match = compact_value(expected_value) == compact_value(detected_value)
+    normalized_match = compact_field_value(field_key, expected_value) == compact_field_value(
+        field_key,
+        detected_value,
+    )
     similarity = similarity_ratio(expected_value, detected_value)
 
     if normalized_match:
@@ -171,7 +177,7 @@ def build_verification_result_row(field_definition, expected_value, detected_val
             "notes": "Matched from OCR text.",
         }
 
-    if field_definition["key"] in {"brandName", "classType"}:
+    if field_key in {"brandName", "classType"}:
         if similarity >= BRAND_CLASS_REVIEW_THRESHOLD:
             return {
                 "field": field_definition["label"],
@@ -181,7 +187,7 @@ def build_verification_result_row(field_definition, expected_value, detected_val
                 "notes": "OCR text is close to the expected value but contains character differences.",
             }
 
-    if field_definition["key"] == "netContents":
+    if field_key == "netContents":
         if similarity >= NET_CONTENTS_REVIEW_THRESHOLD:
             return {
                 "field": field_definition["label"],
@@ -226,9 +232,42 @@ def normalize_whitespace(value):
     return " ".join(value.strip().split())
 
 
+# Normalizes minor trailing punctuation differences in OCR warning text.
+def normalize_warning_text_for_comparison(value):
+    normalized = normalize_whitespace(value)
+    return re.sub(r"[.!?]+$", "", normalized)
+
+
+# Normalizes common OCR variations in net contents units before matching.
+def normalize_net_contents_candidate(value):
+    normalized = value.upper().strip()
+    normalized = re.sub(r"FL\s*[0O]\s*Z", "FL OZ", normalized)
+    normalized = re.sub(r"(\d)(FL\s*OZ\b)", r"\1 \2", normalized)
+    normalized = re.sub(r"(\d)(ML\b)", r"\1 ML", normalized)
+    return normalized
+
+
+def normalize_alcohol_content_candidate(value):
+    normalized = value.upper().strip()
+    normalized = re.sub(r"(?<=\d)%(?=[A-Z])", "% ", normalized)
+    normalized = re.sub(r"\bABV\b", "ALC/VOL", normalized)
+    normalized = re.sub(r"ALC\.?\s*/?\s*VOL\.?", "ALC/VOL", normalized)
+    normalized = re.sub(r"\s+", " ", normalized)
+    return normalized
+
+
 # Compacts a value by removing non-alphanumeric characters for better similarity comparison
 def compact_value(value):
     return re.sub(r"[^a-z0-9]+", "", value.lower())
+
+
+def compact_field_value(field_key, value):
+    if field_key == "alcoholContent":
+        value = normalize_alcohol_content_candidate(value)
+    elif field_key == "netContents":
+        value = normalize_net_contents_candidate(value)
+
+    return compact_value(value)
 
 
 # Computes a similarity ratio between expected and detected values for better matching of OCR spans
@@ -269,17 +308,31 @@ def extract_alcohol_content(ocr_lines):
 # Similar regex-based extraction for net contents, looking for common units like ml and fl oz
 def extract_net_contents(ocr_lines):
     for line in ocr_lines:
-        if NET_CONTENTS_PATTERN.search(line):
-            return line
+        normalized_line = normalize_net_contents_candidate(line)
+        if NET_CONTENTS_PATTERN.search(normalized_line):
+            return normalized_line
 
     return ""
 
 
-# Extracts the government warning by finding the first line that contains "warning" and returning it along with subsequent lines
+# Extracts the government warning by finding the first line that contains "warning"
+# and stopping once the warning's ending phrase is reached.
 def extract_government_warning(ocr_lines):
     for index, line in enumerate(ocr_lines):
         if "warning" in line.lower():
-            return " ".join(ocr_lines[index:])
+            warning_lines = []
+
+            for candidate_line in ocr_lines[index:]:
+                warning_lines.append(candidate_line)
+                if WARNING_END_PATTERN.search(candidate_line):
+                    break
+
+            warning_text = " ".join(warning_lines).strip()
+            warning_end_match = WARNING_END_PATTERN.search(warning_text)
+            if warning_end_match:
+                return warning_text[: warning_end_match.end()].strip()
+
+            return warning_text
 
     return ""
 

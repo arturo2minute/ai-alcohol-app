@@ -9,7 +9,12 @@ if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
 from app.ocr import extract_text_lines
-from app.verifier import build_verification_result
+from app.verifier import (
+    build_verification_result,
+    build_verification_result_row,
+    extract_alcohol_content,
+    extract_government_warning,
+)
 
 
 FIELD_LABELS = {
@@ -30,7 +35,7 @@ class VerifierAssetTests(unittest.TestCase):
         cls.manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         cls.labels_root = manifest_path.parent
 
-    def test_manifest_assets_match_expected_verification_outcomes(self):
+    def test_manifest_assets_match_acceptable_verification_results(self):
         for item in self.manifest:
             with self.subTest(asset=item["id"]):
                 payload = self.build_payload(item)
@@ -47,19 +52,67 @@ class VerifierAssetTests(unittest.TestCase):
                     if status_by_field[label] == "Mismatch"
                 }
 
-                for expected_mismatch in item["expectedMismatches"]:
+                for expected_mismatch in item["expectedMismatchFields"]:
                     self.assertIn(expected_mismatch, mismatched_field_keys)
 
-                expected_outcome = item["expectedOutcome"]
-                if expected_outcome == "match":
-                    self.assertEqual(payload["summary"]["Mismatch"], 0)
-                    self.assertEqual(payload["summary"]["Needs Review"], 0)
-                elif expected_outcome == "mismatch":
-                    self.assertGreater(payload["summary"]["Mismatch"], 0)
-                elif expected_outcome == "match_or_needs_review":
-                    self.assertEqual(payload["summary"]["Mismatch"], 0)
-                else:
-                    self.fail(f"Unexpected expectedOutcome: {expected_outcome}")
+                actual_overall_result = self.build_overall_result(payload["summary"])
+                self.assertIn(
+                    actual_overall_result,
+                    item["acceptableOverallResults"],
+                )
+
+    def test_extract_alcohol_content_matches_abv_lines(self):
+        self.assertEqual(extract_alcohol_content(["6.8%ABV"]), "6.8%ABV")
+
+    def test_alcohol_content_treats_abv_as_equivalent_to_alc_vol(self):
+        result = build_verification_result_row(
+            {"key": "alcoholContent", "label": "Alcohol Content"},
+            "6.8% Alc./Vol.",
+            "6.8%ABV",
+        )
+
+        self.assertEqual(result["status"], "Match")
+
+    def test_extract_government_warning_stops_after_warning_boundary(self):
+        lines = [
+            "CASCADE ERIDGE CELLARS",
+            "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not",
+            "drink alcoholic beverages during pregnancy because of the risk of birth defects. (2)",
+            "Consumption of alcoholic beverages impairs your ability to drive a car or",
+            "operate machinery, and may cause health problems.",
+            "13.5% Alc./Vol.",
+            "750ML",
+        ]
+
+        self.assertEqual(
+            extract_government_warning(lines),
+            (
+                "GOVERNMENT WARNING: (1) According to the Surgeon General, women should "
+                "not drink alcoholic beverages during pregnancy because of the risk of "
+                "birth defects. (2) Consumption of alcoholic beverages impairs your "
+                "ability to drive a car or operate machinery, and may cause health "
+                "problems."
+            ),
+        )
+
+    def test_extract_government_warning_trims_inline_trailing_text(self):
+        lines = [
+            "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not",
+            "drink alcoholic beverages during pregnancy because of the risk of birth defects. (2)",
+            "Consumption of alcoholic beverages impairs your ability to drive a car or",
+            "operate machinery, and may cause health problems 13.5% Alc./Vol. 750ML",
+        ]
+
+        self.assertEqual(
+            extract_government_warning(lines),
+            (
+                "GOVERNMENT WARNING: (1) According to the Surgeon General, women should "
+                "not drink alcoholic beverages during pregnancy because of the risk of "
+                "birth defects. (2) Consumption of alcoholic beverages impairs your "
+                "ability to drive a car or operate machinery, and may cause health "
+                "problems"
+            ),
+        )
 
     def build_payload(self, item):
         image_path = self.labels_root / item["file"]
@@ -75,6 +128,13 @@ class VerifierAssetTests(unittest.TestCase):
             net_contents=item["expectedFields"]["netContents"],
             ocr_lines=ocr_lines,
         )
+
+    def build_overall_result(self, summary):
+        if summary["Mismatch"] > 0:
+            return "fail"
+        if summary["Needs Review"] > 0:
+            return "review_required"
+        return "pass"
 
 
 if __name__ == "__main__":
