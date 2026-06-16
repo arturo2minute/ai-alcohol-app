@@ -27,6 +27,70 @@ BRAND_CLASS_REVIEW_THRESHOLD = 0.92
 NET_CONTENTS_REVIEW_THRESHOLD = 0.90
 WARNING_REVIEW_THRESHOLD = 0.97
 
+
+def build_expected_fields(brand_name, class_type, alcohol_content, net_contents):
+    expected_fields = {
+        "brandName": normalize_value(brand_name),
+        "classType": normalize_value(class_type),
+        "alcoholContent": normalize_value(alcohol_content),
+        "netContents": normalize_value(net_contents),
+        "governmentWarning": STANDARD_GOVERNMENT_WARNING,
+    }
+    return expected_fields
+
+
+def build_verification_artifacts(
+    *,
+    brand_name,
+    class_type,
+    alcohol_content,
+    net_contents,
+    ocr_lines,
+    ocr_error=None,
+):
+    expected_fields = build_expected_fields(
+        brand_name,
+        class_type,
+        alcohol_content,
+        net_contents,
+    )
+    detected_fields = build_ocr_detected_fields(expected_fields, ocr_lines)
+    results = build_verification_results(expected_fields, detected_fields)
+    summary = summarize_results(results)
+    note = build_verification_note(results, ocr_error)
+
+    return {
+        "expectedFields": expected_fields,
+        "results": results,
+        "summary": summary,
+        "note": note,
+    }
+
+
+def assemble_verification_response(
+    *,
+    original_name,
+    mime_type,
+    size_bytes,
+    expected_fields,
+    results,
+    summary,
+    note,
+):
+    return {
+        "file": {
+            "originalName": original_name,
+            "mimeType": mime_type,
+            "sizeBytes": size_bytes,
+        },
+        "expectedFields": expected_fields,
+        "results": results,
+        "summary": summary,
+        "placeholder": False,
+        "note": note,
+    }
+
+
 # Builds the complete verification result object, including expected fields, OCR-detected fields, individual field results, and summary statistics for the UI
 def build_verification_result(
     *,
@@ -40,29 +104,24 @@ def build_verification_result(
     ocr_lines,
     ocr_error=None,
 ):
-    expected_fields = {
-        "brandName": normalize_value(brand_name),
-        "classType": normalize_value(class_type),
-        "alcoholContent": normalize_value(alcohol_content),
-        "netContents": normalize_value(net_contents),
-        "governmentWarning": STANDARD_GOVERNMENT_WARNING,
-    }
-    detected_fields = build_ocr_detected_fields(expected_fields, ocr_lines)
-    results = build_verification_results(expected_fields, detected_fields)
-    summary = summarize_results(results)
+    artifacts = build_verification_artifacts(
+        brand_name=brand_name,
+        class_type=class_type,
+        alcohol_content=alcohol_content,
+        net_contents=net_contents,
+        ocr_lines=ocr_lines,
+        ocr_error=ocr_error,
+    )
 
-    return {
-        "file": {
-            "originalName": original_name,
-            "mimeType": mime_type,
-            "sizeBytes": size_bytes,
-        },
-        "expectedFields": expected_fields,
-        "results": results,
-        "summary": summary,
-        "placeholder": False,
-        "note": build_verification_note(results, ocr_error),
-    }
+    return assemble_verification_response(
+        original_name=original_name,
+        mime_type=mime_type,
+        size_bytes=size_bytes,
+        expected_fields=artifacts["expectedFields"],
+        results=artifacts["results"],
+        summary=artifacts["summary"],
+        note=artifacts["note"],
+    )
 
 # Builds the verification result for the government warning field, applying specific logic for matching and review
 def build_warning_result(field_definition, expected_value, detected_value):
