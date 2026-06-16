@@ -95,6 +95,30 @@ Optional environment variables:
 
 If you change the frontend or backend host/port, update these values to match.
 
+## Deployment Performance Notes
+
+The current prototype is deployed on a small Render web service instance. Backend timing logs show that the main bottleneck is OCR inference time, not file upload, validation logic, or response assembly.
+
+Observed behavior:
+
+- Local development processes a six-image batch at roughly `0.7` to `0.9` seconds per image after the OCR engine is initialized
+- The current Render deployment takes roughly `5` to `8` seconds per image for the OCR step on the same workload
+- The first request after startup may be slower because the RapidOCR engine initializes lazily
+
+Timing logs are emitted by the backend around file read, image decode, preprocessing, OCR, validation, response assembly, and total request time. In local development, these appear in the terminal running `uvicorn`. In Render, they appear in the backend service logs.
+
+Implication:
+
+- The hosted slowdown is primarily a CPU-capacity issue on the deployed instance, not an API-contract or frontend issue
+
+If this moves beyond prototype use, the next production-focused steps should be:
+
+- Run the FastAPI service on a better-provisioned CPU instance
+- Initialize the OCR engine at startup instead of waiting for the first request
+- Move OCR-heavy batch work to a dedicated background worker or separate OCR service
+- Keep batch processing asynchronous and expose progress or status endpoints for larger jobs
+- Consider separate autoscaling for the API service and OCR worker if throughput becomes a requirement
+
 
 
 ## How To Test

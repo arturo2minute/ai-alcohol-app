@@ -46,6 +46,17 @@ The stakeholder context explicitly warns that network restrictions may block ext
 Tradeoff:
 Local OCR keeps the app easier to run in restricted environments, but it limits recovery options for difficult images.
 
+## Hosted OCR Performance
+
+Assumption:
+The current hosted deployment may run OCR materially slower than local development when it is placed on a small shared CPU instance.
+
+Why:
+Backend timing logs show that OCR inference dominates request time in deployment, while file read, image decode, validation, and response assembly remain comparatively small.
+
+Tradeoff:
+The prototype remains simple to deploy as a single web service, but production throughput will likely require better-provisioned compute, startup-time OCR initialization, or a separate OCR worker model for larger batch workloads.
+
 ## Batch Processing Model
 
 Assumption:
